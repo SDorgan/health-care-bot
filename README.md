@@ -1,6 +1,13 @@
 Telegram Bot Example
 ====================
 
+[![build status](https://gitlab.com/fiuba-memo2/tp2/altojardin-bot/badges/master/pipeline.svg)](https://gitlab.com/fiuba-memo2/tp2/altojardin-bot/commits/master)
+
+## Bots
+
+- [Staging](https://web.telegram.org/#/im?p=@altojardin_staging_bot)
+- [Production](https://web.telegram.org/#/im?p=@altojardin_bot)
+
 1. Registrar un nuevo bot con el BotFather de Telegram
 
 * En Telegram https://web.telegram.org/#/im?p=@BotFather
