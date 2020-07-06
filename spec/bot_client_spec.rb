@@ -52,7 +52,7 @@ describe 'BotClient' do
     token = 'fake_token'
 
     stub_get_updates(token, '/start')
-    stub_send_message(token, 'Hola, Alto Jardin')
+    stub_send_message(token, 'Hola Alto Jardin, Bienvenido al Bot de Alto Jardin.')
 
     app = BotClient.new(token)
 
@@ -75,6 +75,17 @@ describe 'BotClient' do
 
     stub_get_updates(token, '/unknown')
     stub_send_message(token, 'Uh? No te entiendo! Me repetis la pregunta?')
+
+    app = BotClient.new(token)
+
+    app.run_once
+  end
+
+  it 'should get a /plan message and respond with wip' do
+    token = 'fake_token'
+
+    stub_get_updates(token, '/plan')
+    stub_send_message(token, 'Work In Progress')
 
     app = BotClient.new(token)
 
