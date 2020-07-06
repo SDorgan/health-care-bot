@@ -1,0 +1,30 @@
+image: ruby:2.5.1
+before_script:
+  - apt-get update -qq && apt-get install -y -qq libpq-dev cmake
+  - ruby -v
+  - which ruby
+  - gem install bundler --no-ri --no-rdoc
+  - bundle install --without staging production
+stages:
+  - build
+
+job_build:
+  stage: build
+  script:
+    - RACK_ENV=test bundle exec rake
+    
+job_deploy_staging:
+  stage: deploy_staging
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_STAGING_APP --api-key=$HEROKU_STAGING_API_KEY
+  only:
+  - staging
+
+job_deploy_production:
+  stage: deploy_production
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_PRODUCTION_APP --api-key=$HEROKU_PRODUCTION_API_KEY
+  only:
+  - master
