@@ -7,12 +7,14 @@ before_script:
   - bundle install --without staging production
 stages:
   - build
+  - deploy_staging
+  - deploy_production
 
 job_build:
   stage: build
   script:
     - RACK_ENV=test bundle exec rake
-    
+
 job_deploy_staging:
   stage: deploy_staging
   script:
