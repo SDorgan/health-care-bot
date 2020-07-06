@@ -12,7 +12,7 @@ class Routes
   end
 
   on_message '/plan' do |bot, message|
-    bot.api.send_message(chat_id: message.chat.id, text: 'Work In Progress')
+    bot.api.send_message(chat_id: message.chat.id, text: 'En Progreso')
   end
 
   default do |bot, message|

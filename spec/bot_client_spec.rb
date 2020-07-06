@@ -85,7 +85,7 @@ describe 'BotClient' do
     token = 'fake_token'
 
     stub_get_updates(token, '/plan')
-    stub_send_message(token, 'Work In Progress')
+    stub_send_message(token, 'En Progreso')
 
     app = BotClient.new(token)
 
