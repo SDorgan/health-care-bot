@@ -1,5 +1,4 @@
 require 'net/http'
-require 'byebug'
 
 class PlanManager
   def self.all_plans
