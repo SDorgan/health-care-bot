@@ -81,11 +81,25 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'should get a /plan message and respond with wip' do
+  it 'when no plans, should get a /plan message and respond with no plan' do
     token = 'fake_token'
 
     stub_get_updates(token, '/plan')
-    stub_send_message(token, 'En Progreso')
+    stub_send_message(token, 'Lo sentimos, parece que no hay planes cargados en el momento.')
+
+    app = BotClient.new(token)
+
+    app.run_once
+  end
+
+  xit 'When plans, should get a /plan message and respond with plans' do # rubocop:disable RSpec/ExampleLength
+    token = 'fake_token'
+
+    add_fake_plan('plan1')
+    add_fake_plan('plan2')
+
+    stub_get_updates(token, '/plan')
+    stub_send_message(token, 'Estos son nuestros planes disponibles: plan1, plan2')
 
     app = BotClient.new(token)
 

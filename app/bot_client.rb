@@ -1,9 +1,12 @@
 require 'telegram/bot'
 require File.dirname(__FILE__) + '/../app/routes'
+RACK_ENV = ENV['RACK_ENV'] ||= 'development' unless defined?(RACK_ENV)
+API_URL = ENV['API_URL'] ||= 'localhost:3000' unless defined?(API_URL)
 
 class BotClient
   def initialize(token = ENV['TELEGRAM_TOKEN'])
     @token = token
+    @api_url = ENV['API_URL']
     @logger = Logger.new(STDOUT)
   end
 
