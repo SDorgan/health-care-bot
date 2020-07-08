@@ -1,5 +1,5 @@
 class PlanManager
-  @@plans = []
+  @@plans = [] # rubocop:disable Style/ClassVars
 
   def self.add_fake_plan(name)
     @@plans << { 'nombre' => name, 'id' => @@plans.length }
