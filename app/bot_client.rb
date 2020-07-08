@@ -1,7 +1,6 @@
 require 'telegram/bot'
 require File.dirname(__FILE__) + '/../app/routes'
 RACK_ENV = ENV['RACK_ENV'] ||= 'development' unless defined?(RACK_ENV)
-API_URL = ENV['API_URL'] ||= 'https://altojardin-health-api-staging.herokuapp.com' unless defined?(API_URL)
 
 class BotClient
   def initialize(token = ENV['TELEGRAM_TOKEN'])
