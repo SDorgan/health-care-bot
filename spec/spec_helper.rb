@@ -15,6 +15,20 @@ ENV['API_URL'] = 'http://192.168.33.10:3000'
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'simplecov'
+
+SimpleCov.start do
+  root(File.join(File.dirname(__FILE__), '..'))
+  coverage_dir 'reports/coverage'
+  add_filter '/spec/'
+  add_filter '/features/'
+  add_filter '/admin/'
+  add_filter '/db/'
+  add_filter '/config/'
+  add_group 'Models', 'app/models'
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Helpers', 'app/helpers'
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

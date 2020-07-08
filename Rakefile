@@ -10,4 +10,10 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << 'rubocop-rspec'
 end
 
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec_report) do |t|
+  t.pattern = './spec/**/*_spec.rb'
+  t.rspec_opts = %w[--format RspecJunitFormatter --out reports/spec/spec.xml]
+end
+
 task default: %i[spec rubocop]
