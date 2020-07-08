@@ -24,6 +24,6 @@ Vagrant.configure(2) do |config|
     rvm use 2.5.1
     rvm gemset create memo2-telegram-bot
     rvm gemset use memo2-telegram-bot
-    gem install bundler -v 1.16.2
+    gem install bundler -v 2.1.4
   SHELL
 end
