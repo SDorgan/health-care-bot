@@ -1,10 +1,12 @@
 class PlanManager
-  def initialize
-    @plans = []
+  @@plans = []
+
+  def self.add_fake_plan(name)
+    @@plans << { 'nombre' => name, 'id' => @@plans.length }
   end
 
-  def all_plans
-    return @plans if ENV['RACK_ENV'] == 'test'
+  def self.all_plans
+    return @@plans if ENV['RACK_ENV'] == 'test'
 
     []
   end

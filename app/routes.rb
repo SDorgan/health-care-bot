@@ -13,9 +13,16 @@ class Routes
   end
 
   on_message '/plan' do |bot, message|
-    plan_manager = PlanManager.new
-    available_plans = plan_manager.all_plans
-    bot.api.send_message(chat_id: message.chat.id, text: 'Lo sentimos, parece que no hay planes cargados en el momento.') if available_plans.empty?
+    available_plans = PlanManager.all_plans
+    if available_plans.empty?
+      bot.api.send_message(chat_id: message.chat.id, text: 'Lo sentimos, parece que no hay planes cargados en el momento.')
+    else
+      plans_text = 'Estos son nuestros planes disponibles:'
+      available_plans.each do |plan|
+        plans_text << "\n#{plan['nombre']}"
+      end
+      bot.api.send_message(chat_id: message.chat.id, text: plans_text)
+    end
   end
 
   default do |bot, message|
