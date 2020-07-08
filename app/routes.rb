@@ -12,7 +12,7 @@ class Routes
     bot.api.send_message(chat_id: message.chat.id, text: "Chau, #{message.from.username}")
   end
 
-  on_message '/plan' do |bot, message|
+  on_message '/planes' do |bot, message|
     available_plans = PlanManager.all_plans
     if available_plans.empty?
       bot.api.send_message(chat_id: message.chat.id, text: 'Lo sentimos, parece que no hay planes cargados en el momento.')

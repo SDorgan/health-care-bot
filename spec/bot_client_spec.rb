@@ -77,8 +77,8 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'when no plans, should get a /plan message and respond with no plan' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates(token, '/plan')
+  it 'when no plans, should get a /planes message and respond with no plan' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/planes')
 
     body = { "planes": [] }
     stub_request(:get, "#{ENV['API_URL']}/planes")
@@ -90,8 +90,8 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'When plans, should get a /plan message and respond with plans' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates(token, '/plan')
+  it 'When plans, should get a /planes message and respond with plans' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/planes')
     body = { "planes": [
       { id: 1, 'nombre': 'plan1' },
       { id: 2, 'nombre': 'plan2' }
