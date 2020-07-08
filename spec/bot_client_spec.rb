@@ -48,9 +48,9 @@ def stub_send_keyboard_message(token, message_text)
 end
 
 describe 'BotClient' do
-  it 'should get a /start message and respond with Hola' do
-    token = 'fake_token'
+  let(:token) { 'fake_token' }
 
+  it 'should get a /start message and respond with Hola' do
     stub_get_updates(token, '/start')
     stub_send_message(token, 'Hola Alto Jardin, Bienvenido al Bot de Alto Jardin.')
 
@@ -60,8 +60,6 @@ describe 'BotClient' do
   end
 
   it 'should get a /stop message and respond with Chau' do
-    token = 'fake_token'
-
     stub_get_updates(token, '/stop')
     stub_send_message(token, 'Chau, altojardin')
 
@@ -71,8 +69,6 @@ describe 'BotClient' do
   end
 
   it 'should get an unknown message message and respond with Do not understand' do
-    token = 'fake_token'
-
     stub_get_updates(token, '/unknown')
     stub_send_message(token, 'Uh? No te entiendo! Me repetis la pregunta?')
 
@@ -81,11 +77,28 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'should get a /plan message and respond with wip' do
-    token = 'fake_token'
+  it 'when no plans, should get a /planes message and respond with no plan' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/planes')
 
-    stub_get_updates(token, '/plan')
-    stub_send_message(token, 'En Progreso')
+    body = { "planes": [] }
+    stub_request(:get, "#{ENV['API_URL']}/planes")
+      .to_return(status: 200, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Lo sentimos, parece que no hay planes cargados en el momento.')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'When plans, should get a /planes message and respond with plans' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/planes')
+    body = { "planes": [
+      { id: 1, 'nombre': 'plan1' },
+      { id: 2, 'nombre': 'plan2' }
+    ] }
+    stub_request(:get, "#{ENV['API_URL']}/planes")
+      .to_return(status: 200, body: body.to_json, headers: {})
+    stub_send_message(token, "Estos son nuestros planes disponibles:\nplan1\nplan2")
 
     app = BotClient.new(token)
 

@@ -4,7 +4,7 @@
 Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu/xenial64'
 
-  config.vm.network 'forwarded_port', guest: 3000, host: 3000
+  config.vm.network 'forwarded_port', guest: 3001, host: 3001
   config.vm.hostname = 'memo2-telegram-bot'
   config.vm.provider 'virtualbox' do |vb|
     vb.memory = '1024'
@@ -24,6 +24,6 @@ Vagrant.configure(2) do |config|
     rvm use 2.5.1
     rvm gemset create memo2-telegram-bot
     rvm gemset use memo2-telegram-bot
-    gem install bundler -v 1.16.2
+    gem install bundler -v 2.1.4
   SHELL
 end
