@@ -10,3 +10,4 @@
 **/.idea
 spec/reports
 reports
+.bundle
