@@ -17,3 +17,8 @@ Característica: Flujo completo via telegram
         Dado que existe el plan "PlanJuventud"
         Cuando envio "/planes"
         Entonces recibo listado de los planes dados de alta
+
+    Escenario: TELE4.1 - Registración exitosa de usuario a plan
+        Dado el plan con nombre "PlanJuventud" con costo unitario $500
+        Cuando envio "/registracion PlanJuventud, Miriam Perez"
+        Entonces recibo "Registración exitosa"
