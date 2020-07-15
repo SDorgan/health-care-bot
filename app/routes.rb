@@ -28,7 +28,11 @@ class Routes
 
   on_message_pattern %r{/registracion (?<nombre_plan>.*), (?<nombre>.*)} do |bot, message, args|
     creado = AfiliadosManager.post_afiliados(args['nombre'], args['nombre_plan'], message.from.id)
-    bot.api.send_message(chat_id: message.chat.id, text: 'Registración exitosa') if creado
+    if creado
+      bot.api.send_message(chat_id: message.chat.id, text: 'Registración exitosa')
+    else
+      bot.api.send_message(chat_id: message.chat.id, text: 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Pepe')
+    end
   end
 
   default do |bot, message|
