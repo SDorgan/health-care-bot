@@ -131,7 +131,7 @@ describe 'BotClient' do
       )
       .to_return(status: 400, body: body.to_json, headers: {})
 
-    stub_send_message(token, 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Pepe')
+    stub_send_message(token, 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Juan')
 
     app = BotClient.new(token)
     app.run_once

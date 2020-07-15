@@ -26,4 +26,4 @@ Característica: Flujo completo via telegram
     Escenario: TELE4.1.b - Registración fallida de usuario a plan no existente
         Dado el plan con nombre "NoExiste" con costo unitario $500
         Cuando envio "/registracion NoExiste, Miriam Perez"
-        Entonces recibo "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Pepe"    
+        Entonces recibo "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Miriam Perez"    

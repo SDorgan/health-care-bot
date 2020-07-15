@@ -31,7 +31,7 @@ class Routes
     if creado
       bot.api.send_message(chat_id: message.chat.id, text: 'Registración exitosa')
     else
-      bot.api.send_message(chat_id: message.chat.id, text: 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Pepe')
+      bot.api.send_message(chat_id: message.chat.id, text: "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, #{args['nombre']}")
     end
   end
 
