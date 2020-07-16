@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../lib/routing'
 require_relative './plans/plan_manager'
 require_relative './afiliados/afiliados_manager'
+require_relative './resumen/resumen_manager'
 
 class Routes
   include Routing
@@ -37,5 +38,11 @@ class Routes
 
   default do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
+  end
+
+  on_message '/resumen' do |bot, message|
+    resumen = ResumenManager.get_resumen(message.from.id)
+
+    bot.api.send_message(chat_id: message.chat.id, text: resumen)
   end
 end
