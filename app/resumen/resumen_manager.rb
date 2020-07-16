@@ -2,7 +2,7 @@ require 'faraday'
 
 class ResumenManager
   def self.get_resumen(id_telegram)
-    response = Faraday.get("#{ENV['API_URL']}/resumen/#{id_telegram}?from=telegram")
+    response = Faraday.get("#{ENV['API_URL']}/resumen?id=#{id_telegram}&from=telegram")
     return parse_resumen(response.body) if response.status == 200
 
     'Error obteniendo el resumen'

@@ -145,7 +145,7 @@ describe 'BotClient' do
                "costo": 5000
              },
              "adicional": 0 }
-    stub_request(:get, "#{ENV['API_URL']}/resumen/141733544?from=telegram").to_return(status: 200, body: body.to_json, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,
                       "Nombre: Nombre de Afiliado\n" \
@@ -166,7 +166,7 @@ describe 'BotClient' do
                "costo": 5000
              },
              "adicional": 1200 }
-    stub_request(:get, "#{ENV['API_URL']}/resumen/141733544?from=telegram").to_return(status: 200, body: body.to_json, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,
                       "Nombre: Nombre de Afiliado\n" \
