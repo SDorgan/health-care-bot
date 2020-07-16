@@ -139,12 +139,13 @@ describe 'BotClient' do
 
   it 'when user looks up resume with a plan but no visits' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
-    body = { "afiliado": 'Nombre de Afiliado',
-             "plan": {
-               "nombre": 'Nombre de Plan',
-               "costo": 5000
-             },
-             "adicional": 0 }
+    body = { "resumen": { "afiliado": 'Nombre de Afiliado',
+                          "plan": {
+                            "nombre": 'Nombre de Plan',
+                            "costo": 5000
+                          },
+                          "adicional": 0,
+                          "total": 5000 } }
     stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,
@@ -160,12 +161,13 @@ describe 'BotClient' do
 
   it 'when user looks up resume with a plan after visits' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
-    body = { "afiliado": 'Nombre de Afiliado',
-             "plan": {
-               "nombre": 'Nombre de Plan',
-               "costo": 5000
-             },
-             "adicional": 1200 }
+    body = { "resumen": { "afiliado": 'Nombre de Afiliado',
+                          "plan": {
+                            "nombre": 'Nombre de Plan',
+                            "costo": 5000
+                          },
+                          "adicional": 1200,
+                          "total": 6200 } }
     stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,

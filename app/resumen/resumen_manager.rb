@@ -10,17 +10,15 @@ class ResumenManager
 
   def self.parse_resumen(body)
     json_response = JSON.parse(body)
+    resumen_json = json_response['resumen']
 
-    plan = json_response['plan']
-    plan_cost = plan['costo']
-    aditionals = json_response['adicional']
-    total = plan_cost + aditionals
+    plan = resumen_json['plan']
 
-    resumen = "Nombre: #{json_response['afiliado']}\n"
+    resumen = "Nombre: #{resumen_json['afiliado']}\n"
     resumen << "Plan: #{plan['nombre']}\n"
-    resumen << "Costo plan: $#{plan_cost}\n"
-    resumen << "Saldo adicional: $#{aditionals}\n"
-    resumen << "Total a pagar: $#{total}"
+    resumen << "Costo plan: $#{plan['costo']}\n"
+    resumen << "Saldo adicional: $#{resumen_json['adicional']}\n"
+    resumen << "Total a pagar: $#{resumen_json['total']}"
 
     resumen
   end
