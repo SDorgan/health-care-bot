@@ -104,4 +104,80 @@ describe 'BotClient' do
 
     app.run_once
   end
+
+  it 'when user register to plan /registracion is successfull' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan')
+
+    body = { "id": 1 }
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 201, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Registración exitosa')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user register to plan /registracion and get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan')
+
+    body = { "id": 1 }
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 400, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Juan')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user looks up resume with a plan but no visits' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/resumen')
+    body = { "resumen": { "afiliado": 'Nombre de Afiliado',
+                          "plan": {
+                            "nombre": 'Nombre de Plan',
+                            "costo": 5000
+                          },
+                          "adicional": 0,
+                          "total": 5000 } }
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
+
+    stub_send_message(token,
+                      "Nombre: Nombre de Afiliado\n" \
+                      "Plan: Nombre de Plan\n" \
+                      "Costo plan: $5000\n" \
+                      "Saldo adicional: $0\n" \
+                      'Total a pagar: $5000')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user looks up resume with a plan after visits' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/resumen')
+    body = { "resumen": { "afiliado": 'Nombre de Afiliado',
+                          "plan": {
+                            "nombre": 'Nombre de Plan',
+                            "costo": 5000
+                          },
+                          "adicional": 1200,
+                          "total": 6200 } }
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 200, body: body.to_json, headers: {})
+
+    stub_send_message(token,
+                      "Nombre: Nombre de Afiliado\n" \
+                      "Plan: Nombre de Plan\n" \
+                      "Costo plan: $5000\n" \
+                      "Saldo adicional: $1200\n" \
+                      'Total a pagar: $6200')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end
