@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../lib/routing'
 require_relative './plans/plan_manager'
 require_relative './afiliados/afiliados_manager'
 require_relative './resumen/resumen_manager'
-
+require 'byebug'
 class Routes
   include Routing
 
