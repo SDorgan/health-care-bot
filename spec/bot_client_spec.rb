@@ -32,6 +32,7 @@ def stub_send_message(token, message_text)
 end
 
 def stub_send_keyboard_message(token, message_text)
+  # rubocop:disable Layout/LineLength
   body = { "ok": true,
            "result": { "message_id": 12,
                        "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
@@ -41,10 +42,11 @@ def stub_send_keyboard_message(token, message_text)
   stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
     .with(
       body: { 'chat_id' => '141733544',
-              'reply_markup' => '{"inline_keyboard":[[{"text":"Jon Snow","callback_data":"1"}],[{"text":"Daenerys Targaryen","callback_data":"2"}],[{"text":"Ned Stark","callback_data":"3"}]]}',
+              'reply_markup' => '{"inline_keyboard":[[{"text":"35 o menos","callback_data":"35"}],[{"text":"36","callback_data":"36"}],[{"text":"37","callback_data":"37"}],[{"text":"38 o más","callback_data":"38"}]]}',
               'text' => message_text }
     )
     .to_return(status: 200, body: body.to_json, headers: {})
+  # rubocop:enable Layout/LineLength
 end
 
 describe 'BotClient' do
@@ -178,6 +180,17 @@ describe 'BotClient' do
                       'Total a pagar: $6200')
 
     app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'should get a /diagnostico covid message and respond with an inline keyboard' do
+    token = 'fake_token'
+
+    stub_get_updates(token, '/diagnostico covid')
+    stub_send_keyboard_message(token, 'Cuál es tu temperatura corporal?')
+
+    app = BotClient.new(token)
+
     app.run_once
   end
 end

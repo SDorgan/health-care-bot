@@ -52,3 +52,20 @@ Característica: Flujo completo via telegram
         Total a pagar: $6200
         """
 
+    @wip
+    Escenario: TELE17-DIAG1.1 - Diagnostico con temperatura no sospechosa de covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid"
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 37
+        Entonces recibo "Gracias por realizar el diagnóstico"
+    @wip
+    Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid"
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 38 o más
+        Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
+        Y mi diagnostico es informado a la institución
+
+

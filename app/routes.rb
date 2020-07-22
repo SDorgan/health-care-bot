@@ -36,13 +36,33 @@ class Routes
     end
   end
 
-  default do |bot, message|
-    bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
+  on_message '/diagnostico covid' do |bot, message|
+    pregunta = 'Cuál es tu temperatura corporal?'
+    kb = [
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '35 o menos', callback_data: '35'),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '36', callback_data: '36'),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '37', callback_data: '37'),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '38 o más', callback_data: '38')
+    ]
+    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+    bot.api.send_message(chat_id: message.chat.id, text: pregunta, reply_markup: markup)
+  end
+
+  on_response_to 'Cuál es tu temperatura corporal?' do |bot, message|
+    if message.data.eql? '38'
+      bot.api.send_message(chat_id: message.message.chat.id, text: message.data)
+    else
+      bot.api.send_message(chat_id: message.message.chat.id, text: 'Gracias por realizar el diagnóstico')
+    end
   end
 
   on_message '/resumen' do |bot, message|
     resumen = ResumenManager.get_resumen(message.from.id)
 
     bot.api.send_message(chat_id: message.chat.id, text: resumen)
+  end
+
+  default do |bot, message|
+    bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
   end
 end
