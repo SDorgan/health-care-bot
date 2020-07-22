@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../lib/routing'
 require_relative './plans/plan_manager'
 require_relative './afiliados/afiliados_manager'
 require_relative './resumen/resumen_manager'
-require 'byebug'
+require_relative './covid/register_covid_service'
+
 class Routes
   include Routing
 
@@ -50,7 +51,12 @@ class Routes
 
   on_response_to 'Cuál es tu temperatura corporal?' do |bot, message|
     if message.data.eql? '38'
-      bot.api.send_message(chat_id: message.message.chat.id, text: message.data)
+      registrado = RegisterCovidService.post_covid(message.message.from.id)
+      if registrado
+        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
+      else
+        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico, no se pudo registrar el caso')
+      end
     else
       bot.api.send_message(chat_id: message.message.chat.id, text: 'Gracias por realizar el diagnóstico')
     end

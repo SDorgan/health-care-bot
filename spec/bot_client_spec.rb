@@ -40,7 +40,7 @@ def stub_get_updates_callback_query(token, message_text, inline_selection)
                                   "last_name": 'GOT', "username": 'altojardin', "language_code": 'en' },
                         "message": {
                           "message_id": 626,
-                          "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
+                          "from": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin' },
                           "chat": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin', "type": 'private' },
                           "date": 1_595_282_006,
                           "text": message_text,
@@ -227,6 +227,20 @@ describe 'BotClient' do
   it 'when user test covid diagnosis with temperature not suspicious recibe not covid suspicious' do
     stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '37')
     stub_send_message(token, 'Gracias por realizar el diagnóstico')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    body = { "sospechoso": true }
+    stub_request(:post, "#{ENV['API_URL']}/covid")
+      .with(
+        body: { 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 200, body: body.to_json, headers: {})
+    stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
 
     app = BotClient.new(token)
     app.run_once
