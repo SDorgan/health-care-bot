@@ -55,7 +55,7 @@ class Routes
       if registrado
         bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
       else
-        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico, no se pudo registrar el caso')
+        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico. No se pudo registrar el caso correctamente en el centro')
       end
     else
       bot.api.send_message(chat_id: message.message.chat.id, text: 'Gracias por realizar el diagnóstico')

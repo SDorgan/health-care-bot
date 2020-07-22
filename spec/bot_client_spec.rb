@@ -245,4 +245,18 @@ describe 'BotClient' do
     app = BotClient.new(token)
     app.run_once
   end
+
+  it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious and get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    body = { "sospechoso": true }
+    stub_request(:post, "#{ENV['API_URL']}/covid")
+      .with(
+        body: { 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 400, body: body.to_json, headers: {})
+    stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico. No se pudo registrar el caso correctamente en el centro')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end
