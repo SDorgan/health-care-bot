@@ -237,7 +237,7 @@ describe 'BotClient' do
     body = { "sospechoso": true }
     stub_request(:post, "#{ENV['API_URL']}/covid")
       .with(
-        body: { 'id_telegram' => 141_733_544 }
+        body: { 'id_telegram' => '141733544' }
       )
       .to_return(status: 200, body: body.to_json, headers: {})
     stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
@@ -251,7 +251,7 @@ describe 'BotClient' do
     body = { "sospechoso": true }
     stub_request(:post, "#{ENV['API_URL']}/covid")
       .with(
-        body: { 'id_telegram' => 141_733_544 }
+        body: { 'id_telegram' => '141733544' }
       )
       .to_return(status: 400, body: body.to_json, headers: {})
     stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico. No se pudo registrar el caso correctamente en el centro')
