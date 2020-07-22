@@ -51,7 +51,7 @@ class Routes
 
   on_response_to 'Cuál es tu temperatura corporal?' do |bot, message|
     if message.data.eql? '38'
-      registrado = RegisterCovidService.post_covid(message.message.from.id)
+      registrado = RegisterCovidService.post_covid(message.message.chat.id)
       if registrado
         bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
       else

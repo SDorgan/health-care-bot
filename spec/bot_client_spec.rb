@@ -40,7 +40,7 @@ def stub_get_updates_callback_query(token, message_text, inline_selection)
                                   "last_name": 'GOT', "username": 'altojardin', "language_code": 'en' },
                         "message": {
                           "message_id": 626,
-                          "from": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin' },
+                          "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
                           "chat": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin', "type": 'private' },
                           "date": 1_595_282_006,
                           "text": message_text,
