@@ -24,11 +24,11 @@ Característica: Flujo completo via telegram
         Entonces recibo "Registración exitosa"
 
     Escenario: TELE4.1.b - Registración fallida de usuario a plan no existente
-        Dado el plan con nombre "NoExiste" con costo unitario $500
+        Dado el plan con nombre "PlanJuventud" con costo unitario $500
         Cuando envio "/registracion NoExiste, Miriam Perez"
         Entonces recibo "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Miriam Perez"
 
-        Escenario: TELE16.1 - Consulta de resumen vacio
+    Escenario: TELE16.1 - Consulta de resumen vacio
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
         Cuando envío "/resumen"
         Entonces recibo:

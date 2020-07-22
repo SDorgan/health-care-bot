@@ -137,6 +137,14 @@ describe 'BotClient' do
     app.run_once
   end
 
+  it 'when user register to plan /registracion with no parameter receives a help' do
+    stub_get_updates(token, '/registracion')
+    stub_send_message(token, 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
   it 'when user register to plan /registracion is successfull' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/registracion PlanJuventud, Juan')
 

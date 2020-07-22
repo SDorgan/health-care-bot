@@ -37,6 +37,10 @@ class Routes
     end
   end
 
+  on_message '/registracion' do |bot, message|
+    bot.api.send_message(chat_id: message.chat.id, text: 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre')
+  end
+
   on_message '/diagnostico covid' do |bot, message|
     pregunta = 'Cuál es tu temperatura corporal?'
     kb = [
