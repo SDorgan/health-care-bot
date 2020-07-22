@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../lib/routing'
-require_relative './plans/plan_manager'
-require_relative './afiliados/afiliados_manager'
-require_relative './resumen/resumen_manager'
+require_relative './plans/plan_service'
+require_relative './afiliados/afiliados_service'
+require_relative './resumen/resumen_service'
 require_relative './covid/register_covid_service'
 
 class Routes
@@ -16,7 +16,7 @@ class Routes
   end
 
   on_message '/planes' do |bot, message|
-    available_plans = PlanManager.all_plans
+    available_plans = PlanService.all_plans
     if available_plans.empty?
       bot.api.send_message(chat_id: message.chat.id, text: 'Lo sentimos, parece que no hay planes cargados en el momento.')
     else
@@ -29,7 +29,7 @@ class Routes
   end
 
   on_message_pattern %r{/registracion (?<nombre_plan>.*), (?<nombre>.*)} do |bot, message, args|
-    creado = AfiliadosManager.post_afiliados(args['nombre'], args['nombre_plan'], message.from.id)
+    creado = AfiliadosService.post_afiliados(args['nombre'], args['nombre_plan'], message.from.id)
     if creado
       bot.api.send_message(chat_id: message.chat.id, text: 'Registración exitosa')
     else
@@ -63,7 +63,7 @@ class Routes
   end
 
   on_message '/resumen' do |bot, message|
-    resumen = ResumenManager.get_resumen(message.from.id)
+    resumen = ResumenService.get_resumen(message.from.id)
 
     bot.api.send_message(chat_id: message.chat.id, text: resumen)
   end
