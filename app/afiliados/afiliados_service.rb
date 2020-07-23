@@ -1,6 +1,6 @@
 require 'faraday'
 
-class AfiliadosManager
+class AfiliadosService
   def self.post_afiliados(nombre, nombre_plan, id_telegram)
     @request = {
       "nombre": nombre,

@@ -24,11 +24,11 @@ Característica: Flujo completo via telegram
         Entonces recibo "Registración exitosa"
 
     Escenario: TELE4.1.b - Registración fallida de usuario a plan no existente
-        Dado el plan con nombre "NoExiste" con costo unitario $500
+        Dado el plan con nombre "PlanJuventud" con costo unitario $500
         Cuando envio "/registracion NoExiste, Miriam Perez"
         Entonces recibo "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Miriam Perez"
 
-        Escenario: TELE16.1 - Consulta de resumen vacio
+    Escenario: TELE16.1 - Consulta de resumen vacio
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
         Cuando envío "/resumen"
         Entonces recibo:
@@ -51,4 +51,21 @@ Característica: Flujo completo via telegram
         Saldo adicional: $ 1200
         Total a pagar: $6200
         """
+
+    @wip
+    Escenario: TELE17-DIAG1.1 - Diagnostico con temperatura no sospechosa de covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid"
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 37
+        Entonces recibo "Gracias por realizar el diagnóstico"
+    @wip
+    Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid"
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 38 o más
+        Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
+        Y mi diagnostico es informado a la institución
+
 
