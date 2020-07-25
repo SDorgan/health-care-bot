@@ -268,7 +268,7 @@ describe 'BotClient' do
     app.run_once
   end
 
-  xit 'when user non afiliated looks for his resume' do # rubocop:disable RSpec/ExampleLength
+  it 'when user non afiliated looks for his resume' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
     body = 'El ID no pertenece a un afiliado'
     stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 401, body: body, headers: {})
