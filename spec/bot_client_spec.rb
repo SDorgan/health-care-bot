@@ -31,7 +31,38 @@ def stub_send_message(token, message_text)
     .to_return(status: 200, body: body.to_json, headers: {})
 end
 
+def stub_get_updates_callback_query(token, message_text, inline_selection)
+  body = { "ok": true, "result": [{
+    "update_id": 866_033_907,
+    "callback_query": { "from": { "id": 141_733_544,
+                                  "is_bot": false,
+                                  "first_name": 'Alto Jardin',
+                                  "last_name": 'GOT', "username": 'altojardin', "language_code": 'en' },
+                        "message": {
+                          "message_id": 626,
+                          "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
+                          "chat": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin', "type": 'private' },
+                          "date": 1_595_282_006,
+                          "text": message_text,
+                          "reply_markup": {
+                            "inline_keyboard": [
+                              [{ "text": '35 o menos', "callback_data": '35' }],
+                              [{ "text": '36', "callback_data": '36' }],
+                              [{ "text": '37', "callback_data": '37' }],
+                              [{ "text": '38 o más', "callback_data": '38' }]
+                            ]
+                          }
+                        }, "chat_instance": '2671782303129352872',
+                        "data": inline_selection }
+
+  }] }
+
+  stub_request(:any, "https://api.telegram.org/bot#{token}/getUpdates")
+    .to_return(body: body.to_json, status: 200, headers: { 'Content-Length' => 3 })
+end
+
 def stub_send_keyboard_message(token, message_text)
+  # rubocop:disable Layout/LineLength
   body = { "ok": true,
            "result": { "message_id": 12,
                        "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
@@ -41,10 +72,11 @@ def stub_send_keyboard_message(token, message_text)
   stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
     .with(
       body: { 'chat_id' => '141733544',
-              'reply_markup' => '{"inline_keyboard":[[{"text":"Jon Snow","callback_data":"1"}],[{"text":"Daenerys Targaryen","callback_data":"2"}],[{"text":"Ned Stark","callback_data":"3"}]]}',
+              'reply_markup' => '{"inline_keyboard":[[{"text":"35 o menos","callback_data":"35"}],[{"text":"36","callback_data":"36"}],[{"text":"37","callback_data":"37"}],[{"text":"38 o más","callback_data":"38"}]]}',
               'text' => message_text }
     )
     .to_return(status: 200, body: body.to_json, headers: {})
+  # rubocop:enable Layout/LineLength
 end
 
 describe 'BotClient' do
@@ -102,6 +134,14 @@ describe 'BotClient' do
 
     app = BotClient.new(token)
 
+    app.run_once
+  end
+
+  it 'when user register to plan /registracion with no parameter receives a help' do
+    stub_get_updates(token, '/registracion')
+    stub_send_message(token, 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre')
+
+    app = BotClient.new(token)
     app.run_once
   end
 
@@ -176,6 +216,75 @@ describe 'BotClient' do
                       "Costo plan: $5000\n" \
                       "Saldo adicional: $1200\n" \
                       'Total a pagar: $6200')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'should get a /diagnostico covid message and respond with an inline keyboard' do
+    token = 'fake_token'
+
+    stub_get_updates(token, '/diagnostico covid')
+    stub_send_keyboard_message(token, 'Cuál es tu temperatura corporal?')
+
+    app = BotClient.new(token)
+
+    app.run_once
+  end
+
+  it 'when user test covid diagnosis with temperature not suspicious recibe not covid suspicious' do
+    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '37')
+    stub_send_message(token, 'Gracias por realizar el diagnóstico')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    body = { "sospechoso": true }
+    stub_request(:post, "#{ENV['API_URL']}/covid")
+      .with(
+        body: { 'id_telegram' => '141733544' }
+      )
+      .to_return(status: 200, body: body.to_json, headers: {})
+    stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious and get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    body = { "sospechoso": true }
+    stub_request(:post, "#{ENV['API_URL']}/covid")
+      .with(
+        body: { 'id_telegram' => '141733544' }
+      )
+      .to_return(status: 400, body: body.to_json, headers: {})
+    stub_send_message(token, 'Sos un caso sospechoso de COVID. Acércate a un centro médico. No se pudo registrar el caso correctamente en el centro')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user non afiliated looks for his resume' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/resumen')
+    body = 'El ID no pertenece a un afiliado'
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 401, body: body, headers: {})
+
+    stub_send_message(token, 'Parece que no estás afiliado a ningún plan, por lo que no podemos mandarte un resumen en este momento.')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when API fails looking up the resume' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/resumen')
+    body = 'Error obteniendo el resumen'
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 500, body: body, headers: {})
+
+    stub_send_message(token, 'Error obteniendo el resumen')
 
     app = BotClient.new(token)
     app.run_once
