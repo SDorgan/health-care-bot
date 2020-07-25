@@ -9,7 +9,6 @@ Vagrant.configure(2) do |config|
   config.vm.provider 'virtualbox' do |vb|
     vb.memory = '1024'
     vb.name = config.vm.hostname
-    vb.customize ['modifyvm', :id, '--uartmode1', 'disconnected']
   end
 
   config.vm.provision 'shell', privileged: false, inline: <<-SHELL
