@@ -53,6 +53,12 @@ Característica: Flujo completo via telegram
         """
 
     @wip
+    Escenario: TELE16.3 - Consulta de resumen no afiliado
+        Dado un usuario que no se afilió a ningún plan
+        Cuando envío "/resumen"
+        Entonces recibo un error explicando que no estoy afiliado
+
+    @wip
     Escenario: TELE17-DIAG1.1 - Diagnostico con temperatura no sospechosa de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
