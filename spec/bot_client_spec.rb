@@ -279,7 +279,7 @@ describe 'BotClient' do
     app.run_once
   end
 
-  xit 'when API fails looking up the resume' do # rubocop:disable RSpec/ExampleLength
+  it 'when API fails looking up the resume' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
     body = 'Error obteniendo el resumen'
     stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544&from=telegram").to_return(status: 500, body: body, headers: {})
