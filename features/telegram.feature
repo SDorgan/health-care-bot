@@ -1,11 +1,10 @@
 # language: es
 
-@wip
+@manual @mvp
 Característica: Flujo completo via telegram
 
-"""
-    Estos escenarios son para ejecucion manual de todo el flujo y por ello no son gherkin estricto
-
+    """
+    Estos escenarios son para ejecución manual de todo el flujo y por ello no son gherkin estricto
     """
 
     Escenario: TELE1 - Consulta de planes sin haber cargado ninguno
@@ -39,6 +38,7 @@ Característica: Flujo completo via telegram
         Saldo adicional: $ 0
         Total a pagar: $5000
         """
+	
     Escenario: TELE16.2 - Consulta de resumen con gastos
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
         Y que se registró una atención por la prestación "Traumatologia" en el centro "Hospital Alemán"
@@ -52,20 +52,18 @@ Característica: Flujo completo via telegram
         Total a pagar: $6200
         """
 
-    @wip
     Escenario: TELE16.3 - Consulta de resumen no afiliado
         Dado un usuario que no se afilió a ningún plan
         Cuando envío "/resumen"
         Entonces recibo un error explicando que no estoy afiliado
 
-    @wip
     Escenario: TELE17-DIAG1.1 - Diagnostico con temperatura no sospechosa de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
         Entonces recibo "Cuál es tu temperatura corporal?"
         Cuando envío 37
-        Entonces recibo "Gracias por realizar el diagnóstico"
-    @wip
+	Entonces recibo "Gracias por realizar el diagnóstico"
+
     Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
@@ -74,4 +72,52 @@ Característica: Flujo completo via telegram
         Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
         Y mi diagnostico es informado a la institución
 
+    Escenario: TELE17-DIAG1.2 - Diagnostico sin covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid"
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 37
+        Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?"
+        Y envío "No"
+        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?"
+        Y envío "No"
+        Entonces recibo "Tenés tos?"
+        Y envío "No"
+        Entonces recibo "Tenés dolor de garganta?"
+        Y envío "No"
+        Entonces recibo "Tenés dificultad respiratoria?"
+        Y envío "No"
+        Entonces recibo en formato de opciones
+        """
+        - Convivo con alguien que tiene COVID
+        - En los últimos 14 días estuve cerca de alguien con COVID
+        - Estoy embarazada
+        - Tengo/tuve cancer
+        - Tengo diabetes
+        - Tengo enfermedad hepática
+        - Tengo enfermedad renal crónica
+        - Tengo alguna enfermedad respiratoria
+        - Tengo alguna enfermedad cardiológica
+        - Ninguna
+        """
+        Y elijo "Ninguna"
+        Entonces recibo "Gracias por realizar el diagnóstico"
 
+    Escenario: TELE18-DIAG2.2 - Diagnostico sospechoso de covid
+        Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+        Cuando envia "/diagnostico covid
+        Entonces recibo "Cuál es tu temperatura corporal?"
+        Cuando envío 37
+        Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?"
+        Y envío "No"
+        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?"
+        Y envío "No"
+        Entonces recibo "Tenés tos?"
+        Y envío "Si"
+        Entonces recibo "Sos un caso sospechoso de COVID. Acercate a un centro médico"
+        Y mi diagnostico es informado a la institución
+
+    Escenario: TELE19-DIAG3 - Diagnostico covid tira error por persona no afiliada
+        Dado que el usuario "locomalo" no está afiliado
+        Cuando envia "/diagnostico covid"
+        Entonces recibe "Disculple, esta funcionalidad solo está disponible para afiliados."
