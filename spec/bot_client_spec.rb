@@ -246,7 +246,7 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'should receive next question when user makes the test with temperature under 38' do # rubocop:disable RSpec/ExampleLength
+  it 'should receive temp, smell and taste questions when is no suspect' do # rubocop:disable RSpec/ExampleLength, Metrics/BlockLength
     options_temp = [
       [{ "text": '35 o menos', "callback_data": '35' }],
       [{ "text": '36', "callback_data": '36' }],
@@ -254,7 +254,7 @@ describe 'BotClient' do
       [{ "text": '38 o más', "callback_data": '38' }]
     ]
 
-    options_olfato = [
+    options_yes_no_questions = [
       [{ "text": 'Sí', "callback_data": 'si' }],
       [{ "text": 'No', "callback_data": 'no' }]
     ]
@@ -268,7 +268,14 @@ describe 'BotClient' do
                                      'Percibiste una marcada pérdida de olfato de manera repentina?')
     stub_get_updates_callback_query(token,
                                     'Percibiste una marcada pérdida de olfato de manera repentina?',
-                                    options_olfato,
+                                    options_yes_no_questions,
+                                    'No')
+
+    stub_edit_message_callback_query(token,
+                                     'Percibiste una marcada pérdida del gusto de manera repentina?')
+    stub_get_updates_callback_query(token,
+                                    'Percibiste una marcada pérdida del gusto de manera repentina?',
+                                    options_yes_no_questions,
                                     'No')
 
     stub_send_message(token, 'Gracias por realizar el diagnóstico')

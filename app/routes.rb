@@ -9,6 +9,8 @@ require_relative './covid/temp_question'
 require_relative './covid/temp_rule'
 require_relative './covid/smell_question'
 require_relative './covid/smell_rule'
+require_relative './covid/taste_question'
+require_relative './covid/taste_rule'
 require_relative './covid/suspect_response'
 
 class Routes
@@ -88,6 +90,28 @@ class Routes
 
   on_response_to CovidSmellQuestion::TEXT do |bot, message|
     positive_case = CovidSmellRule.process(message.data)
+
+    if positive_case
+      registrado = RegisterCovidService.post_covid(message.message.chat.id)
+
+      bot.api.send_message(
+        chat_id: message.message.chat.id,
+        text: CovidSupectResponse.create(registrado)
+      )
+    else
+      question = CovidTasteQuestion.new
+
+      bot.api.edit_message_text(
+        chat_id: message.message.chat.id,
+        message_id: message.message.message_id,
+        text: question.text,
+        reply_markup: question.body
+      )
+    end
+  end
+
+  on_response_to CovidTasteQuestion::TEXT do |bot, message|
+    positive_case = CovidTasteRule.process(message.data)
 
     if positive_case
       registrado = RegisterCovidService.post_covid(message.message.chat.id)
