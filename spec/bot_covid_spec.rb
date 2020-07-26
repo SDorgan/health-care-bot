@@ -1,6 +1,8 @@
 require 'spec_helper'
 require 'web_mock'
 
+require_relative '../app/covid/last_selection_question'
+
 require File.dirname(__FILE__) + '/../app/bot_client'
 
 describe 'BotClientCovidCommands' do
@@ -28,6 +30,29 @@ describe 'BotClientCovidCommands' do
     options_yes_no_questions = [
       [{ "text": 'Sí', "callback_data": 'si' }],
       [{ "text": 'No', "callback_data": 'no' }]
+    ]
+
+    options_last_question = [
+      [{ "text": CovidLastSelectionQuestion::OPT_CONVIVIR[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_CONVIVIR[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_14_DIAS_CERCA[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_14_DIAS_CERCA[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_EMBARAZADA[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_EMBARAZADA[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_CANCER[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_CANCER[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_DIAB[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_DIAB[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_HEPA[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_HEPA[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_RENAL[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_RENAL[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_RESP[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_RESP[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_CARD[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_CARD[:id] }],
+      [{ "text": CovidLastSelectionQuestion::OPT_NINGUNA[:text],
+         "callback_data": CovidLastSelectionQuestion::OPT_NINGUNA[:id] }]
     ]
 
     stub_get_updates_callback_query(token,
@@ -63,6 +88,11 @@ describe 'BotClientCovidCommands' do
     stub_get_updates_callback_query(token, 'Tenés dificultad respiratoria?',
                                     options_yes_no_questions,
                                     'No')
+
+    stub_edit_message_callback_query(token, 'Última: elija una opción')
+    stub_get_updates_callback_query(token, 'Última: elija una opción',
+                                    options_last_question,
+                                    'Ninguna')
 
     stub_send_message(token, 'Gracias por realizar el diagnóstico')
 

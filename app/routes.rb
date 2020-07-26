@@ -11,10 +11,12 @@ require_relative './covid/smell_question'
 require_relative './covid/cough_question'
 require_relative './covid/sore_throat_question'
 require_relative './covid/breath_problem_question'
+require_relative './covid/last_selection_question'
 require_relative './covid/taste_question'
 require_relative './covid/temp_question'
 require_relative './covid/temp_rule'
 require_relative './covid/yes_no_rule'
+require_relative './covid/last_selection_rule'
 
 class Routes
   include Routing
@@ -104,7 +106,13 @@ class Routes
   end
 
   on_response_to CovidBreathProblemQuestion::TEXT do |bot, message|
-    positive_case = YesNoRule.new.process(message.data)
+    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidLastSelectionQuestion.new)
+
+    question_proc.run(bot, message)
+  end
+
+  on_response_to CovidLastSelectionQuestion::TEXT do |bot, message|
+    positive_case = LastSelectionRule.new.process(message.data)
 
     if positive_case
       registrado = RegisterCovidService.post_covid(message.message.chat.id)
