@@ -2,15 +2,15 @@ require File.dirname(__FILE__) + '/../lib/routing'
 
 require File.dirname(__FILE__) + '/plans/routes'
 require File.dirname(__FILE__) + '/covid/routes'
+require File.dirname(__FILE__) + '/resumen/routes'
 require File.dirname(__FILE__) + '/afiliados/routes'
-
-require_relative './resumen/resumen_service'
 
 class Routes
   include Routing
 
   include PlansRoutes
   include CovidRoutes
+  include ResumenRoutes
   include RegistrationRoutes
 
   on_message '/start' do |bot, message|
@@ -23,11 +23,5 @@ class Routes
 
   default do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
-  end
-
-  on_message '/resumen' do |bot, message|
-    resumen = ResumenService.get_resumen(message.from.id)
-
-    bot.api.send_message(chat_id: message.chat.id, text: resumen)
   end
 end
