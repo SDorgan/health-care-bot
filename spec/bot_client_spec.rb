@@ -179,44 +179,4 @@ describe 'BotClient' do
 
     app.run_once
   end
-
-  it 'when user register to plan /registracion with no parameter receives a help' do
-    stub_get_updates(token, '/registracion')
-    stub_send_message(token, 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre')
-
-    app = BotClient.new(token)
-    app.run_once
-  end
-
-  it 'when user register to plan /registracion is successfull' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates(token, '/registracion PlanJuventud, Juan')
-
-    body = { "id": 1 }
-    stub_request(:post, "#{ENV['API_URL']}/afiliados")
-      .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'id_telegram' => 141_733_544 }
-      )
-      .to_return(status: 201, body: body.to_json, headers: {})
-
-    stub_send_message(token, 'Registración exitosa')
-
-    app = BotClient.new(token)
-    app.run_once
-  end
-
-  it 'when user register to plan /registracion and get error' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates(token, '/registracion PlanJuventud, Juan')
-
-    body = { "id": 1 }
-    stub_request(:post, "#{ENV['API_URL']}/afiliados")
-      .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'id_telegram' => 141_733_544 }
-      )
-      .to_return(status: 400, body: body.to_json, headers: {})
-
-    stub_send_message(token, 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Juan')
-
-    app = BotClient.new(token)
-    app.run_once
-  end
 end
