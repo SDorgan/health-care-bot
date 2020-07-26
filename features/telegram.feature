@@ -172,8 +172,3 @@ Característica: Flujo completo via telegram
     Y elijo "Si"
     Entonces recibo "Sos un caso sospechoso de COVID. Acercate a un centro médico"
     Y mi diagnostico es informado a la institución
-
-  Escenario: TELE19-DIAG3 - Diagnostico covid tira error por persona no afiliada
-    Dado que el usuario "locomalo" no está afiliado
-    Cuando envia "/diagnostico covid"
-    Entonces recibe "Disculple, esta funcionalidad solo está disponible para afiliados."

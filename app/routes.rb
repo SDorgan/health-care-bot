@@ -1,25 +1,14 @@
 require File.dirname(__FILE__) + '/../lib/routing'
+require File.dirname(__FILE__) + '/covid/routes'
 
 require_relative './plans/plan_service'
 require_relative './afiliados/afiliados_service'
 require_relative './resumen/resumen_service'
 
-require_relative './covid/register_covid_service'
-require_relative './covid/suspect_response'
-require_relative './covid/question_processor'
-require_relative './covid/smell_question'
-require_relative './covid/cough_question'
-require_relative './covid/sore_throat_question'
-require_relative './covid/breath_problem_question'
-require_relative './covid/last_selection_question'
-require_relative './covid/taste_question'
-require_relative './covid/temp_question'
-require_relative './covid/temp_rule'
-require_relative './covid/yes_no_rule'
-require_relative './covid/last_selection_rule'
-
 class Routes
   include Routing
+
+  include CovidRoutes
 
   on_message '/start' do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: "Hola #{message.from.first_name}, Bienvenido al Bot de Alto Jardin.")
@@ -63,69 +52,5 @@ class Routes
 
   on_message '/registracion' do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre')
-  end
-
-  on_message '/diagnostico covid' do |bot, message|
-    question = CovidTempQuestion.new
-
-    bot.api.send_message(
-      chat_id: message.chat.id,
-      text: question.text,
-      reply_markup: question.body
-    )
-  end
-
-  on_response_to CovidTempQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(CovidTemperatureRule.new, CovidSmellQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidSmellQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidTasteQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidTasteQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidCoughQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidCoughQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidSoreThroatQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidSoreThroatQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidBreathProblemQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidBreathProblemQuestion::TEXT do |bot, message|
-    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidLastSelectionQuestion.new)
-
-    question_proc.run(bot, message)
-  end
-
-  on_response_to CovidLastSelectionQuestion::TEXT do |bot, message|
-    positive_case = LastSelectionRule.new.process(message.data)
-
-    if positive_case
-      registrado = RegisterCovidService.post_covid(message.message.chat.id)
-
-      bot.api.send_message(
-        chat_id: message.message.chat.id,
-        text: CovidSupectResponse.create(registrado)
-      )
-    else
-      bot.api.send_message(
-        chat_id: message.message.chat.id,
-        text: 'Gracias por realizar el diagnóstico'
-      )
-    end
   end
 end
