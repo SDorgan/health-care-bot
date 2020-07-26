@@ -1,13 +1,15 @@
 require File.dirname(__FILE__) + '/../lib/routing'
+
+require File.dirname(__FILE__) + '/plans/routes'
 require File.dirname(__FILE__) + '/covid/routes'
 require File.dirname(__FILE__) + '/afiliados/routes'
 
-require_relative './plans/plan_service'
 require_relative './resumen/resumen_service'
 
 class Routes
   include Routing
 
+  include PlansRoutes
   include CovidRoutes
   include RegistrationRoutes
 
@@ -21,19 +23,6 @@ class Routes
 
   default do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
-  end
-
-  on_message '/planes' do |bot, message|
-    available_plans = PlanService.all_plans
-    if available_plans.empty?
-      bot.api.send_message(chat_id: message.chat.id, text: 'Lo sentimos, parece que no hay planes cargados en el momento.')
-    else
-      plans_text = 'Estos son nuestros planes disponibles:'
-      available_plans.each do |plan|
-        plans_text << "\n#{plan['nombre']}"
-      end
-      bot.api.send_message(chat_id: message.chat.id, text: plans_text)
-    end
   end
 
   on_message '/resumen' do |bot, message|
