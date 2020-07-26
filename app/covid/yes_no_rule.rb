@@ -1,5 +1,7 @@
 class YesNoRule
-  def self.process(answer)
-    answer.eql? 'si'
+  AFIRMATIVE = 'si'.freeze
+
+  def process(answer)
+    answer.eql? AFIRMATIVE
   end
 end

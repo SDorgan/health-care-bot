@@ -1,5 +1,7 @@
 class CovidTemperatureRule
-  def self.process(temp)
-    temp.eql? '38'
+  BOUND = '38'.freeze
+
+  def process(temp)
+    temp.eql? BOUND
   end
 end

@@ -17,8 +17,8 @@ describe 'BotClientCovidCommands' do
     app.run_once
   end
 
-  it 'should receive temp, smell and taste questions when is no suspect' do # rubocop:disable RSpec/ExampleLength, Metrics/BlockLength
-    options_temp = [
+  it 'should receive temp, smell, taste and cough questions when is no suspect' do # rubocop:disable RSpec/ExampleLength, Metrics/BlockLength
+    options_temp_qustion = [
       [{ "text": '35 o menos', "callback_data": '35' }],
       [{ "text": '36', "callback_data": '36' }],
       [{ "text": '37', "callback_data": '37' }],
@@ -32,7 +32,7 @@ describe 'BotClientCovidCommands' do
 
     stub_get_updates_callback_query(token,
                                     'Cuál es tu temperatura corporal?',
-                                    options_temp,
+                                    options_temp_qustion,
                                     '37')
 
     stub_edit_message_callback_query(token,
@@ -46,6 +46,11 @@ describe 'BotClientCovidCommands' do
                                      'Percibiste una marcada pérdida del gusto de manera repentina?')
     stub_get_updates_callback_query(token,
                                     'Percibiste una marcada pérdida del gusto de manera repentina?',
+                                    options_yes_no_questions,
+                                    'No')
+
+    stub_edit_message_callback_query(token, 'Tenés tos?')
+    stub_get_updates_callback_query(token, 'Tenés tos?',
                                     options_yes_no_questions,
                                     'No')
 

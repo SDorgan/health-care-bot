@@ -5,11 +5,13 @@ require_relative './afiliados/afiliados_service'
 require_relative './resumen/resumen_service'
 
 require_relative './covid/register_covid_service'
+require_relative './covid/suspect_response'
+require_relative './covid/question_processor'
+require_relative './covid/smell_question'
+require_relative './covid/cough_question'
+require_relative './covid/taste_question'
 require_relative './covid/temp_question'
 require_relative './covid/temp_rule'
-require_relative './covid/smell_question'
-require_relative './covid/taste_question'
-require_relative './covid/suspect_response'
 require_relative './covid/yes_no_rule'
 
 class Routes
@@ -21,6 +23,10 @@ class Routes
 
   on_message '/stop' do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: "Chau, #{message.from.username}")
+  end
+
+  default do |bot, message|
+    bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
   end
 
   on_message '/planes' do |bot, message|
@@ -66,51 +72,25 @@ class Routes
   end
 
   on_response_to CovidTempQuestion::TEXT do |bot, message|
-    positive_case = CovidTemperatureRule.process(message.data)
+    question_proc = CovidQuestionProcessor.new(CovidTemperatureRule.new, CovidSmellQuestion.new)
 
-    if positive_case
-      registrado = RegisterCovidService.post_covid(message.message.chat.id)
-
-      bot.api.send_message(
-        chat_id: message.message.chat.id,
-        text: CovidSupectResponse.create(registrado)
-      )
-    else
-      question = CovidSmellQuestion.new
-
-      bot.api.edit_message_text(
-        chat_id: message.message.chat.id,
-        message_id: message.message.message_id,
-        text: question.text,
-        reply_markup: question.body
-      )
-    end
+    question_proc.run(bot, message)
   end
 
   on_response_to CovidSmellQuestion::TEXT do |bot, message|
-    positive_case = YesNoRule.process(message.data)
+    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidTasteQuestion.new)
 
-    if positive_case
-      registrado = RegisterCovidService.post_covid(message.message.chat.id)
-
-      bot.api.send_message(
-        chat_id: message.message.chat.id,
-        text: CovidSupectResponse.create(registrado)
-      )
-    else
-      question = CovidTasteQuestion.new
-
-      bot.api.edit_message_text(
-        chat_id: message.message.chat.id,
-        message_id: message.message.message_id,
-        text: question.text,
-        reply_markup: question.body
-      )
-    end
+    question_proc.run(bot, message)
   end
 
   on_response_to CovidTasteQuestion::TEXT do |bot, message|
-    positive_case = YesNoRule.process(message.data)
+    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidCoughQuestion.new)
+
+    question_proc.run(bot, message)
+  end
+
+  on_response_to CovidCoughQuestion::TEXT do |bot, message|
+    positive_case = YesNoRule.new.process(message.data)
 
     if positive_case
       registrado = RegisterCovidService.post_covid(message.message.chat.id)
@@ -125,9 +105,5 @@ class Routes
         text: 'Gracias por realizar el diagnóstico'
       )
     end
-  end
-
-  default do |bot, message|
-    bot.api.send_message(chat_id: message.chat.id, text: 'Uh? No te entiendo! Me repetis la pregunta?')
   end
 end
