@@ -31,7 +31,7 @@ def stub_send_message(token, message_text)
     .to_return(status: 200, body: body.to_json, headers: {})
 end
 
-def stub_get_updates_callback_query(token, message_text, inline_selection)
+def stub_get_updates_callback_query(token, message_text, inline_keyboard, inline_selection)
   body = { "ok": true, "result": [{
     "update_id": 866_033_907,
     "callback_query": { "from": { "id": 141_733_544,
@@ -45,12 +45,7 @@ def stub_get_updates_callback_query(token, message_text, inline_selection)
                           "date": 1_595_282_006,
                           "text": message_text,
                           "reply_markup": {
-                            "inline_keyboard": [
-                              [{ "text": '35 o menos', "callback_data": '35' }],
-                              [{ "text": '36', "callback_data": '36' }],
-                              [{ "text": '37', "callback_data": '37' }],
-                              [{ "text": '38 o más', "callback_data": '38' }]
-                            ]
+                            "inline_keyboard": inline_keyboard
                           }
                         }, "chat_instance": '2671782303129352872',
                         "data": inline_selection }
@@ -59,6 +54,25 @@ def stub_get_updates_callback_query(token, message_text, inline_selection)
 
   stub_request(:any, "https://api.telegram.org/bot#{token}/getUpdates")
     .to_return(body: body.to_json, status: 200, headers: { 'Content-Length' => 3 })
+end
+
+def stub_edit_message_callback_query(token, message_text)
+  stub_request(:post, "https://api.telegram.org/bot#{token}/editMessageText")
+    .with(
+      body: {
+        "chat_id": '141733544',
+        "message_id": '626',
+        "reply_markup": '{"inline_keyboard":[[{"text":"Sí","callback_data":"si"}],[{"text":"No","callback_data":"no"}]]}',
+        "text": message_text
+      },
+      headers: {
+        'Accept': '*/*',
+        'Accept-Encoding': 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Faraday v1.0.1'
+      }
+    )
+    .to_return(status: 200, body: '', headers: {})
 end
 
 def stub_send_keyboard_message(token, message_text)
@@ -232,8 +246,31 @@ describe 'BotClient' do
     app.run_once
   end
 
-  it 'when user test covid diagnosis with temperature not suspicious recibe not covid suspicious' do
-    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '37')
+  it 'should receive next question when user makes the test with temperature under 38' do # rubocop:disable RSpec/ExampleLength
+    options_temp = [
+      [{ "text": '35 o menos', "callback_data": '35' }],
+      [{ "text": '36', "callback_data": '36' }],
+      [{ "text": '37', "callback_data": '37' }],
+      [{ "text": '38 o más', "callback_data": '38' }]
+    ]
+
+    options_olfato = [
+      [{ "text": 'Sí', "callback_data": 'si' }],
+      [{ "text": 'No', "callback_data": 'no' }]
+    ]
+
+    stub_get_updates_callback_query(token,
+                                    'Cuál es tu temperatura corporal?',
+                                    options_temp,
+                                    '37')
+
+    stub_edit_message_callback_query(token,
+                                     'Percibiste una marcada pérdida de olfato de manera repentina?')
+    stub_get_updates_callback_query(token,
+                                    'Percibiste una marcada pérdida de olfato de manera repentina?',
+                                    options_olfato,
+                                    'No')
+
     stub_send_message(token, 'Gracias por realizar el diagnóstico')
 
     app = BotClient.new(token)
@@ -241,7 +278,18 @@ describe 'BotClient' do
   end
 
   it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    options_temp = [
+      [{ "text": '35 o menos', "callback_data": '35' }],
+      [{ "text": '36', "callback_data": '36' }],
+      [{ "text": '37', "callback_data": '37' }],
+      [{ "text": '38 o más', "callback_data": '38' }]
+    ]
+
+    stub_get_updates_callback_query(token,
+                                    'Cuál es tu temperatura corporal?',
+                                    options_temp,
+                                    '38')
+
     body = { "sospechoso": true }
     stub_request(:post, "#{ENV['API_URL']}/covid")
       .with(
@@ -255,7 +303,18 @@ describe 'BotClient' do
   end
 
   it 'when user test covid diagnosis with temperature suspicious recibe covid suspicious and get error' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates_callback_query(token, 'Cuál es tu temperatura corporal?', '38')
+    options_temp = [
+      [{ "text": '35 o menos', "callback_data": '35' }],
+      [{ "text": '36', "callback_data": '36' }],
+      [{ "text": '37', "callback_data": '37' }],
+      [{ "text": '38 o más', "callback_data": '38' }]
+    ]
+
+    stub_get_updates_callback_query(token,
+                                    'Cuál es tu temperatura corporal?',
+                                    options_temp,
+                                    '38')
+
     body = { "sospechoso": true }
     stub_request(:post, "#{ENV['API_URL']}/covid")
       .with(

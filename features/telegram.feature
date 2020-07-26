@@ -60,33 +60,71 @@ Característica: Flujo completo via telegram
     Escenario: TELE17-DIAG1.1 - Diagnostico con temperatura no sospechosa de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
-        Entonces recibo "Cuál es tu temperatura corporal?"
-        Cuando envío 37
+        Entonces recibo "Cuál es tu temperatura corporal?" con opciones
+	"""
+	- 35 o menos
+	- 36
+	- 37
+	- 38 o más
+	"""
+        Cuando elijo "37"
 	Entonces recibo "Gracias por realizar el diagnóstico"
 
     Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
-        Entonces recibo "Cuál es tu temperatura corporal?"
-        Cuando envío 38 o más
+	Entonces recibo "Cuál es tu temperatura corporal?" con opciones
+	"""
+	- 35 o menos
+	- 36
+	- 37
+	- 38 o más
+	"""
+        Cuando elijo "38 o más"
         Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
         Y mi diagnostico es informado a la institución
 
     Escenario: TELE17-DIAG1.2 - Diagnostico sin covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid"
-        Entonces recibo "Cuál es tu temperatura corporal?"
-        Cuando envío 37
-        Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?"
-        Y envío "No"
-        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?"
-        Y envío "No"
-        Entonces recibo "Tenés tos?"
-        Y envío "No"
-        Entonces recibo "Tenés dolor de garganta?"
-        Y envío "No"
-        Entonces recibo "Tenés dificultad respiratoria?"
-        Y envío "No"
+        Entonces recibo "Cuál es tu temperatura corporal?" con opciones
+	"""
+	- 35 o menos
+	- 36
+	- 37
+	- 38 o más
+	"""
+        Cuando elijo "37"
+	Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Tenés tos?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Tenés dolor de garganta?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Tenés dificultad respiratoria?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
         Entonces recibo en formato de opciones
         """
         - Convivo con alguien que tiene COVID
@@ -106,14 +144,32 @@ Característica: Flujo completo via telegram
     Escenario: TELE18-DIAG2.2 - Diagnostico sospechoso de covid
         Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
         Cuando envia "/diagnostico covid
-        Entonces recibo "Cuál es tu temperatura corporal?"
-        Cuando envío 37
-        Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?"
-        Y envío "No"
-        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?"
-        Y envío "No"
-        Entonces recibo "Tenés tos?"
-        Y envío "Si"
+        Entonces recibo "Cuál es tu temperatura corporal?" con opciones
+	"""
+	- 35 o menos
+	- 36
+	- 37
+	- 38 o más
+	"""
+        Cuando elijo 37
+        Entonces recibo "Percibiste una marcada pérdida de olfato de manera repentina?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Percibiste una marcada pérdida del gusto de manera repentina?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "No"
+        Entonces recibo "Tenés tos?" con opciones
+	"""
+	- Sí
+	- No
+	"""
+        Y elijo "Si"
         Entonces recibo "Sos un caso sospechoso de COVID. Acercate a un centro médico"
         Y mi diagnostico es informado a la institución
 

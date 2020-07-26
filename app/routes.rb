@@ -1,8 +1,15 @@
 require File.dirname(__FILE__) + '/../lib/routing'
+
 require_relative './plans/plan_service'
 require_relative './afiliados/afiliados_service'
 require_relative './resumen/resumen_service'
+
 require_relative './covid/register_covid_service'
+require_relative './covid/temp_question'
+require_relative './covid/temp_rule'
+require_relative './covid/smell_question'
+require_relative './covid/smell_rule'
+require_relative './covid/suspect_response'
 
 class Routes
   include Routing
@@ -28,6 +35,12 @@ class Routes
     end
   end
 
+  on_message '/resumen' do |bot, message|
+    resumen = ResumenService.get_resumen(message.from.id)
+
+    bot.api.send_message(chat_id: message.chat.id, text: resumen)
+  end
+
   on_message_pattern %r{/registracion (?<nombre_plan>.*), (?<nombre>.*)} do |bot, message, args|
     creado = AfiliadosService.post_afiliados(args['nombre'], args['nombre_plan'], message.from.id)
     if creado
@@ -42,34 +55,53 @@ class Routes
   end
 
   on_message '/diagnostico covid' do |bot, message|
-    pregunta = 'Cuál es tu temperatura corporal?'
-    kb = [
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '35 o menos', callback_data: '35'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '36', callback_data: '36'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '37', callback_data: '37'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '38 o más', callback_data: '38')
-    ]
-    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-    bot.api.send_message(chat_id: message.chat.id, text: pregunta, reply_markup: markup)
+    question = CovidTempQuestion.new
+
+    bot.api.send_message(
+      chat_id: message.chat.id,
+      text: question.text,
+      reply_markup: question.body
+    )
   end
 
-  on_response_to 'Cuál es tu temperatura corporal?' do |bot, message|
-    if message.data.eql? '38'
+  on_response_to CovidTempQuestion::TEXT do |bot, message|
+    positive_case = CovidTemperatureRule.process(message.data)
+
+    if positive_case
       registrado = RegisterCovidService.post_covid(message.message.chat.id)
-      if registrado
-        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico')
-      else
-        bot.api.send_message(chat_id: message.message.chat.id, text: 'Sos un caso sospechoso de COVID. Acércate a un centro médico. No se pudo registrar el caso correctamente en el centro')
-      end
+
+      bot.api.send_message(
+        chat_id: message.message.chat.id,
+        text: CovidSupectResponse.create(registrado)
+      )
     else
-      bot.api.send_message(chat_id: message.message.chat.id, text: 'Gracias por realizar el diagnóstico')
+      question = CovidSmellQuestion.new
+
+      bot.api.edit_message_text(
+        chat_id: message.message.chat.id,
+        message_id: message.message.message_id,
+        text: question.text,
+        reply_markup: question.body
+      )
     end
   end
 
-  on_message '/resumen' do |bot, message|
-    resumen = ResumenService.get_resumen(message.from.id)
+  on_response_to CovidSmellQuestion::TEXT do |bot, message|
+    positive_case = CovidSmellRule.process(message.data)
 
-    bot.api.send_message(chat_id: message.chat.id, text: resumen)
+    if positive_case
+      registrado = RegisterCovidService.post_covid(message.message.chat.id)
+
+      bot.api.send_message(
+        chat_id: message.message.chat.id,
+        text: CovidSupectResponse.create(registrado)
+      )
+    else
+      bot.api.send_message(
+        chat_id: message.message.chat.id,
+        text: 'Gracias por realizar el diagnóstico'
+      )
+    end
   end
 
   default do |bot, message|
