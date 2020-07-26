@@ -1,21 +1,9 @@
-class CovidSmellQuestion
+require_relative './yes_no_question'
+
+class CovidSmellQuestion < YesNoQuestion
   TEXT = 'Percibiste una marcada pérdida de olfato de manera repentina?'.freeze
 
-  attr_accessor :text, :body
-
   def initialize
-    @text = TEXT
-    @body = create_options
-  end
-
-  private
-
-  def create_options
-    kb = [
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Sí', callback_data: 'si'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: 'No', callback_data: 'no')
-    ]
-
-    Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+    super(TEXT)
   end
 end

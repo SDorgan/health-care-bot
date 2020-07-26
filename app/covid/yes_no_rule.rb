@@ -1,4 +1,4 @@
-class CovidSmellRule
+class YesNoRule
   def self.process(answer)
     answer.eql? 'si'
   end
