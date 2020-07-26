@@ -9,6 +9,7 @@ require_relative './covid/suspect_response'
 require_relative './covid/question_processor'
 require_relative './covid/smell_question'
 require_relative './covid/cough_question'
+require_relative './covid/sore_throat_question'
 require_relative './covid/taste_question'
 require_relative './covid/temp_question'
 require_relative './covid/temp_rule'
@@ -90,6 +91,12 @@ class Routes
   end
 
   on_response_to CovidCoughQuestion::TEXT do |bot, message|
+    question_proc = CovidQuestionProcessor.new(YesNoRule.new, CovidSoreThroatQuestion.new)
+
+    question_proc.run(bot, message)
+  end
+
+  on_response_to CovidSoreThroatQuestion::TEXT do |bot, message|
     positive_case = YesNoRule.new.process(message.data)
 
     if positive_case

@@ -54,6 +54,11 @@ describe 'BotClientCovidCommands' do
                                     options_yes_no_questions,
                                     'No')
 
+    stub_edit_message_callback_query(token, 'Tenés dolor de garganta?')
+    stub_get_updates_callback_query(token, 'Tenés dolor de garganta?',
+                                    options_yes_no_questions,
+                                    'No')
+
     stub_send_message(token, 'Gracias por realizar el diagnóstico')
 
     app = BotClient.new(token)
