@@ -29,7 +29,7 @@ describe 'BotClientResumenCommands' do
     app.run_once
   end
 
-  xit 'when user looks up resume with a plan after visits' do # rubocop:disable RSpec/ExampleLength,  Metrics/BlockLength
+  it 'when user looks up resume with a plan after visits' do # rubocop:disable RSpec/ExampleLength,  Metrics/BlockLength
     stub_get_updates(token, '/resumen')
     body = { "resumen": { "afiliado": 'Nombre de Afiliado',
                           "plan": {
@@ -40,7 +40,7 @@ describe 'BotClientResumenCommands' do
                           "total": 6200,
                           "items": [
                             {
-                              "concepto": 'Traumatología',
+                              "concepto": 'Traumatología - Hospital Alemán',
                               "fecha": '02/02/2020',
                               "costo": 500
                             },
@@ -58,9 +58,9 @@ describe 'BotClientResumenCommands' do
                                       "Costo plan: $5000\n" \
                                       "Saldo adicional: $1200\n" \
                                       "Total a pagar: $6200\n\n<pre>" \
-                                      "Fecha      | Concepto      | Costo\n" \
-                                      "02/02/2020 | Traumatología | $500\n" \
-                                      '04/02/2020 | Medicamentos  | $700</pre>')
+                                      "Fecha      | Concepto                        | Costo\n" \
+                                      "02/02/2020 | Traumatología - Hospital Alemán | $500\n" \
+                                      '04/02/2020 | Medicamentos                    | $700</pre>')
 
     app = BotClient.new(token)
     app.run_once
