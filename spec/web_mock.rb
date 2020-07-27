@@ -48,6 +48,24 @@ def stub_send_message(token, message_text)
     .to_return(status: 200, body: body.to_json, headers: {})
 end
 
+def stub_send_message_with_html_parse(token, message_text)
+  body = {
+    "ok": true,
+    "result": {
+      "message_id": 12,
+      "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
+      "chat": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin', "type": 'private' },
+      "date": 1_557_782_999, "text": message_text
+    }
+  }
+
+  stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
+    .with(
+      body: { 'chat_id' => '141733544', 'parse_mode' => 'html', 'text' => message_text }
+    )
+    .to_return(status: 200, body: body.to_json, headers: {})
+end
+
 def stub_get_updates_callback_query(token, message_text, inline_keyboard, inline_selection)
   body = {
     "ok": true,
