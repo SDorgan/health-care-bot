@@ -26,6 +26,18 @@ Característica: Flujo completo via telegram
     Dado el plan con nombre "PlanJuventud" con costo unitario $500
     Cuando envio "/registracion NoExiste, Miriam Perez"
     Entonces recibo "Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Miriam Perez"
+    
+  Escenario: TELE4 - Registración exitosa de afiliado de 18 años, sin hijos, sin conyuge a plan juventud
+    Dado el plan con nombre "PlanJuventud" con costo unitario $500
+    Y restricciones edad min 15, edad max 20, hijos max 0, admite conyuge "no"
+    Cuando envio "/registracion PlanJuventud, Miriam Perez, 18"
+    Entonces recibo "Registración exitosa"
+
+  Escenario: TELE9 - Registración exitosa de afiliado de 28 años, sin hijos, sin conyuge a plan 310
+      Dado el plan con nombre "Plan310" con costo unitario $1000
+      Y restricciones edad min 21, edad max 99, hijos max 0, admite conyuge "no"
+      Cuando envio "/registracion Plan310, Miriam Perez, 28"
+      Entonces recibo "Registración exitosa"
 
   Escenario: TELE16.1 - Consulta de resumen vacio
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
