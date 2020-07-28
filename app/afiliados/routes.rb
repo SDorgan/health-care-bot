@@ -19,11 +19,7 @@ module RegistrationRoutes
     end
   end
 
-  on_message_pattern %r{/registracion (?<parametros>.*)} do |bot, message, _args|
-    bot.api.send_message(chat_id: message.chat.id, text: 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre, {edad}')
-  end
-
-  on_message '/registracion' do |bot, message|
+  on_message_pattern %r{/registracion(?<parametros>.*)} do |bot, message, _args|
     bot.api.send_message(chat_id: message.chat.id, text: 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre, {edad}')
   end
 end
