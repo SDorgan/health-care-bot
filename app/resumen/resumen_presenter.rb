@@ -1,4 +1,3 @@
-require 'byebug'
 class ResumenPresenter
   def self.parse_resumen(body) # rubocop:disable Metrics/AbcSize
     json_response = JSON.parse(body)
