@@ -22,7 +22,7 @@ describe 'BotClientRegistrationCommands' do
     app.run_once
   end
 
-  it 'when user register to plan /registracion is successfull' do # rubocop:disable RSpec/ExampleLength
+  it 'when user register to plan /registracion is successful' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/registracion PlanJuventud, Juan, 18')
 
     body = { "id": 1 }
@@ -38,17 +38,33 @@ describe 'BotClientRegistrationCommands' do
     app.run_once
   end
 
-  it 'when user register to plan /registracion and get error' do # rubocop:disable RSpec/ExampleLength
-    stub_get_updates(token, '/registracion PlanJuventud, Juan, 18')
+  it 'when user register to plan /registracion without minimum age should get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 7')
 
-    body = { "id": 1 }
+    body = 'no alcanza el límite mínimo de edad'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 7, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
       )
-      .to_return(status: 400, body: body.to_json, headers: {})
+      .to_return(status: 400, body: body, headers: {})
 
-    stub_send_message(token, 'Registración fallida, verifique que el plan exista. Ej: /registracion PlanJuventud, Juan, {edad}')
+    stub_send_message(token, "Registración fallida: #{body}")
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user register to plan /registracion with age more than limit should get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 80')
+
+    body = 'supera el límite máximo de edad'
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 80, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 400, body: body, headers: {})
+
+    stub_send_message(token, "Registración fallida: #{body}")
 
     app = BotClient.new(token)
     app.run_once

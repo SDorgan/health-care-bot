@@ -39,6 +39,19 @@ Característica: Flujo completo via telegram
       Cuando envio "/registracion Plan310, Miriam Perez, 28"
       Entonces recibo "Registración exitosa"
 
+  Escenario: TELE5 - Registración fallida de afiliado de 28 años, sin hijos, sin conyuge a plan juventud
+        Dado el plan con nombre "PlanJuventud" con costo unitario $500
+        Y restricciones edad min 15, edad max 20, hijos max 0, admite conyuge "no"
+        Cuando envio "/registracion PlanJuventud, Miriam Perez, 28"
+        Entonces recibo "Registración fallida: supera el límite máximo de edad"
+
+  Escenario: TELE6 - Registración fallida de afiliado de 8 años, sin hijos, sin conyuge a plan juventud
+      Dado el plan con nombre "PlanJuventud" con costo unitario $500
+      Y restricciones edad min 15, edad max 20, hijos max 0, admite conyuge "no"
+      Cuando envio "/registracion PlanJuventud, Miriam Perez, 8"
+      Entonces recibo "Registración fallida: no alcanza el límite mínimo de edad"
+
+
   Escenario: TELE16.1 - Consulta de resumen vacio
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
     Cuando envío "/resumen"
