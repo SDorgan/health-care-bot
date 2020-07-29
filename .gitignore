@@ -11,3 +11,4 @@
 spec/reports
 reports
 .bundle
+*.log

@@ -11,6 +11,6 @@ class AfiliadosService
       "conyuge": data[:conyuge]
     }
     @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, 'Content-Type' => 'application/json')
-    true if @response.status == 201
+    @response
   end
 end
