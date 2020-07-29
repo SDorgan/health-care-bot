@@ -149,4 +149,20 @@ describe 'BotClientRegistrationCommands' do
     app = BotClient.new(token)
     app.run_once
   end
+
+  it 'when user register to plan require children /registracion with no children should get error' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 20')
+
+    body = 'este plan requiere tener hijos'
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 400, body: body, headers: {})
+
+    stub_send_message(token, "Registración fallida: #{body}")
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end
