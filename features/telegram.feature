@@ -93,17 +93,20 @@ Característica: Flujo completo via telegram
       Cuando envio "/registracion PlanFamiliar, Miriam Perez, 28, conyuge"
       Entonces recibo "Registración fallida: este plan requiere tener hijos"
 
-  Escenario: TELE18 - Registración fallida de afiliado de 28 años, con hijos, con conyuge a plan pareja
-      Dado el plan con nombre "PlanPareja" con costo unitario $1800
-      Y restricciones edad min 15, edad max 99, hijos max 0, requiere conyuge "si"
-      Cuando envio "/registracion PlanPareja, Miriam Perez, 28, hijos-1, conyuge"
-      Entonces recibo "Registración fallida: este plan no admite hijos"
+  @wip
+  Escenario: TELE14 - Consulta exitosa de Centro por prestación
+      Dado el centro con nombre "Hospital Alemán" con coordenadas "(-37.30, -58.97)"
+      Y el centro tiene la prestación "Traumatología"
+      Cuando envio "/consulta traumatologia"
+      Entonces recibo "Hospital Alemán - Coordenadas (-37.30, -58.97)"
 
-  Escenario: TELE19 - Registración fallida de afiliado de 28 años, con hijos, sin conyuge a plan pareja
-      Dado el plan con nombre "PlanPareja" con costo unitario $1800
-      Y restricciones edad min 15, edad max 99, hijos max 0, requiere conyuge "si"
-      Cuando envio "/registracion PlanPareja, Miriam Perez, 28, hijos-1"
-      Entonces recibo "Registración fallida: este plan no admite hijos"
+  @wip
+  Escenario: TELE15 - Consulta sin respuestas de Centro por prestación
+      Dado el centro con nombre "Hospital Alemán" con coordenadas "(-37.30, -58.97)"
+      Y el centro tiene la prestación "Traumatología"
+      Cuando envio "/consulta cirujia"
+      Entonces recibo "No hay hospitales disponibles"
+
 
   Escenario: TELE16.1 - Consulta de resumen vacio
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
@@ -154,20 +157,6 @@ Característica: Flujo completo via telegram
     """
     Cuando elijo "37"
     Entonces recibo "Gracias por realizar el diagnóstico"
-
-  Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
-    Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
-    Cuando envia "/diagnostico covid"
-    Entonces recibo "Cuál es tu temperatura corporal?" con opciones
-    """
-    - 35 o menos
-    - 36
-    - 37
-    - 38 o más
-    """
-    Cuando elijo "38 o más"
-    Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
-    Y mi diagnostico es informado a la institución
 
   Escenario: TELE17-DIAG1.2 - Diagnostico sin covid
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
@@ -226,6 +215,26 @@ Característica: Flujo completo via telegram
     Y elijo "Ninguna"
     Entonces recibo "Gracias por realizar el diagnóstico"
 
+  Escenario: TELE18 - Registración fallida de afiliado de 28 años, con hijos, con conyuge a plan pareja
+      Dado el plan con nombre "PlanPareja" con costo unitario $1800
+      Y restricciones edad min 15, edad max 99, hijos max 0, requiere conyuge "si"
+      Cuando envio "/registracion PlanPareja, Miriam Perez, 28, hijos-1, conyuge"
+      Entonces recibo "Registración fallida: este plan no admite hijos"
+
+  Escenario: TELE18-DIAG2.1 - Diagnostico con temperatura sospechosa de covid
+    Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
+    Cuando envia "/diagnostico covid"
+    Entonces recibo "Cuál es tu temperatura corporal?" con opciones
+    """
+    - 35 o menos
+    - 36
+    - 37
+    - 38 o más
+    """
+    Cuando elijo "38 o más"
+    Entonces recibo "Sos un caso sospechoso de COVID. Acércate a un centro médico"
+    Y mi diagnostico es informado a la institución
+
   Escenario: TELE18-DIAG2.2 - Diagnostico sospechoso de covid
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud"
     Cuando envia "/diagnostico covid
@@ -257,6 +266,12 @@ Característica: Flujo completo via telegram
     Y elijo "Si"
     Entonces recibo "Sos un caso sospechoso de COVID. Acercate a un centro médico"
     Y mi diagnostico es informado a la institución
+
+  Escenario: TELE19 - Registración fallida de afiliado de 28 años, con hijos, sin conyuge a plan pareja
+      Dado el plan con nombre "PlanPareja" con costo unitario $1800
+      Y restricciones edad min 15, edad max 99, hijos max 0, requiere conyuge "si"
+      Cuando envio "/registracion PlanPareja, Miriam Perez, 28, hijos-1"
+      Entonces recibo "Registración fallida: este plan no admite hijos"
 
   Escenario: TELE20 - Consulta de resumen con medicamentos
     Dado el afiliado "Lionel Messi" afiliado a "PlanJuventud" con costo $5000
