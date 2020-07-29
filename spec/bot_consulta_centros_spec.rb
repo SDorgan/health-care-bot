@@ -19,7 +19,7 @@ describe 'BotClientCentersCommands' do
 
     body = 'La prestación pedida no existe'
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=PrestacionFalsa")
-      .to_return(status: 400, body: body.to_json, headers: {})
+      .to_return(status: 404, body: body.to_json, headers: {})
 
     stub_send_message(token, 'Perdón, no se encontró ninguna prestación con ese nombre.')
 
@@ -27,7 +27,7 @@ describe 'BotClientCentersCommands' do
     app.run_once
   end
 
-  xit 'when benefit has no centers ' do # rubocop:disable RSpec/ExampleLength
+  it 'when benefit has no centers ' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/consulta Traumatologia')
 
     body = { 'centros': [] }
@@ -40,7 +40,7 @@ describe 'BotClientCentersCommands' do
     app.run_once
   end
 
-  xit 'when benefit has one center' do # rubocop:disable RSpec/ExampleLength
+  it 'when benefit has one center' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/consulta Traumatologia')
 
     body = { 'centros': [{
@@ -50,9 +50,9 @@ describe 'BotClientCentersCommands' do
       'longitud': -36.40
     }] }
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
-      .to_return(status: 400, body: body.to_json, headers: {})
+      .to_return(status: 200, body: body.to_json, headers: {})
 
-    stub_send_message(token, 'Hospital Alemán - Coordenadas (-37.54, -36.40)')
+    stub_send_message(token, "Hospital Alemán - Coordenadas(-37.54, -36.4)\n")
 
     app = BotClient.new(token)
     app.run_once
@@ -74,7 +74,7 @@ describe 'BotClientCentersCommands' do
                            'longitud': -46.45
                          }] }
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
-      .to_return(status: 400, body: body.to_json, headers: {})
+      .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token, "Hospital Alemán - Coordenadas (-37.54, -36.40)\nHospital Suizo - Coordenadas (-39.54, -46.45)")
 
