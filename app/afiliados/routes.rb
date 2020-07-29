@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../../lib/routing'
+require File.dirname(__FILE__) + '/../helpers/afiliados_routes_helper'
 
 require_relative './afiliados_service'
 
@@ -11,8 +12,8 @@ module RegistrationRoutes
       nombre_plan = parametros[0].squeeze(' ').strip
       nombre = parametros[1].squeeze(' ').strip
       edad = parametros[2].to_i
-      cantidad_hijos = 0
-      conyuge = !args['parametros'].match(/conyuge\b/).nil?
+      cantidad_hijos = AfiliadosRoutesHelper.get_numero_hijos(args['parametros'])
+      conyuge = AfiliadosRoutesHelper.have_conyuge(args['parametros'])
       response = AfiliadosService.post_afiliados(nombre: nombre,
                                                  nombre_plan: nombre_plan,
                                                  edad: edad,
