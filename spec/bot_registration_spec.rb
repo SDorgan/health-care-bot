@@ -69,4 +69,52 @@ describe 'BotClientRegistrationCommands' do
     app = BotClient.new(token)
     app.run_once
   end
+
+  it 'when user register to plan /registracion with spouse is successful' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 18, conyuge')
+
+    body = { "id": 1 }
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 201, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Registración exitosa')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user register to plan /registracion with children is successful' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 18, hijos-1')
+
+    body = { "id": 1 }
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 201, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Registración exitosa')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when user register to plan /registracion with children and spouse is successful' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/registracion PlanJuventud, Juan, 18, hijos-10, conyuge')
+
+    body = { "id": 1 }
+    stub_request(:post, "#{ENV['API_URL']}/afiliados")
+      .with(
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 10, 'conyuge': true, 'id_telegram' => 141_733_544 }
+      )
+      .to_return(status: 201, body: body.to_json, headers: {})
+
+    stub_send_message(token, 'Registración exitosa')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end
