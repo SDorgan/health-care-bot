@@ -58,7 +58,7 @@ describe 'BotClientCentersCommands' do
     app.run_once
   end
 
-  xit 'when benefit has multiple centers' do # rubocop:disable RSpec/ExampleLength
+  it 'when benefit has multiple centers' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/consulta Traumatologia')
 
     body = { 'centros': [{
@@ -76,7 +76,7 @@ describe 'BotClientCentersCommands' do
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
       .to_return(status: 200, body: body.to_json, headers: {})
 
-    stub_send_message(token, "Hospital Alemán - Coordenadas (-37.54, -36.40)\nHospital Suizo - Coordenadas (-39.54, -46.45)")
+    stub_send_message(token, "Hospital Alemán - Coordenadas(-37.54, -36.4)\nHospital Suizo - Coordenadas(-39.54, -46.45)\n")
 
     app = BotClient.new(token)
     app.run_once

@@ -93,14 +93,12 @@ Característica: Flujo completo via telegram
       Cuando envio "/registracion PlanFamiliar, Miriam Perez, 28, conyuge"
       Entonces recibo "Registración fallida: este plan requiere tener hijos"
 
-  @wip
   Escenario: TELE14 - Consulta exitosa de Centro por prestación
       Dado el centro con nombre "Hospital Alemán" con coordenadas "(-37.30, -58.97)"
       Y el centro tiene la prestación "Traumatología"
       Cuando envio "/consulta traumatologia"
       Entonces recibo "Hospital Alemán - Coordenadas (-37.30, -58.97)"
 
-  @wip
   Escenario: TELE15 - Consulta sin respuestas de Centro por prestación
       Dado el centro con nombre "Hospital Alemán" con coordenadas "(-37.30, -58.97)"
       Y el centro tiene la prestación "Traumatología"
