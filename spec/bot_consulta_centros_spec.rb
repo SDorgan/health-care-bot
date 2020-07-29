@@ -1,12 +1,20 @@
 require 'spec_helper'
 require 'web_mock'
 
-require File.dirname(__FILE__) + '/../app/bot_centers'
+require File.dirname(__FILE__) + '/../app/bot_client'
 
 describe 'BotClientCentersCommands' do
   let(:token) { 'fake_token' }
 
-  xit 'when benefit doesnt exist' do # rubocop:disable RSpec/ExampleLength
+  it 'when benefit is not sent' do
+    stub_get_updates(token, '/consulta')
+    stub_send_message(token, 'Comando incorrecto, se necesita nombre de la prestación.')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when benefit doesnt exist' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/consulta PrestacionFalsa')
 
     body = 'La prestación pedida no existe'

@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/plans/routes'
 require File.dirname(__FILE__) + '/covid/routes'
 require File.dirname(__FILE__) + '/resumen/routes'
 require File.dirname(__FILE__) + '/afiliados/routes'
+require File.dirname(__FILE__) + '/consulta_centros/routes'
 
 class Routes
   include Routing
@@ -12,6 +13,7 @@ class Routes
   include CovidRoutes
   include ResumenRoutes
   include RegistrationRoutes
+  include CentrosRoutes
 
   on_message '/start' do |bot, message|
     bot.api.send_message(chat_id: message.chat.id, text: "Hola #{message.from.first_name}, Bienvenido al Bot de Alto Jardin.")
