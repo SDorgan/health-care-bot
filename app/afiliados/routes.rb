@@ -12,7 +12,7 @@ module RegistrationRoutes
       nombre = parametros[1].squeeze(' ').strip
       edad = parametros[2].to_i
       cantidad_hijos = 0
-      conyuge = false
+      conyuge = !args['parametros'].match(/conyuge\b/).nil?
       response = AfiliadosService.post_afiliados(nombre: nombre,
                                                  nombre_plan: nombre_plan,
                                                  edad: edad,
