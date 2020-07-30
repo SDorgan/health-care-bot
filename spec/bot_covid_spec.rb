@@ -22,7 +22,7 @@ describe 'BotClientCovidCommands' do
     app.run_once
   end
 
-  xit 'should get a /diagnostico covid message and respond with an inline keyboard' do # rubocop:disable RSpec/ExampleLength
+  it 'should get a /diagnostico covid message and respond with an inline keyboard' do # rubocop:disable RSpec/ExampleLength
     token = 'fake_token'
 
     stub_get_updates(token, '/diagnostico covid')
