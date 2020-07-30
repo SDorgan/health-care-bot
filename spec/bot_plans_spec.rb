@@ -5,6 +5,7 @@ require File.dirname(__FILE__) + '/../app/bot_client'
 
 describe 'BotClientPlansCommands' do
   let(:token) { 'fake_token' }
+  let(:cobertura_infinita) { 1000 }
 
   it 'when no plans, should get a /planes message and respond with no plan' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/planes')
@@ -62,6 +63,38 @@ describe 'BotClientPlansCommands' do
                       "Edad máxima: 30\n" \
                       "Cantidad hijos máxima: 0\n" \
                       'Conyuge: No admite conyuge')
+    app = BotClient.new(token)
+
+    app.run_once
+  end
+
+  it 'should get plan data with name /plan message and respond with the plan info coverage infinite' do # rubocop:disable RSpec/ExampleLength, Metrics/BlockLength
+    stub_get_updates(token, '/plan PlanFamiliar')
+    body = { "plan": {
+      "id": 1,
+      "nombre": 'PlanFamiliar',
+      "costo": 4000,
+      "limite_cobertura_visitas": cobertura_infinita,
+      "copago": 100,
+      "cobertura_medicamentos": 30,
+      "edad_minima": 20,
+      "edad_maxima": 60,
+      "cantidad_hijos_maxima": 2,
+      "conyuge": 'ADMITE_CONYUGE'
+    } }
+    stub_request(:get, "#{ENV['API_URL']}/planes?nombre=PlanFamiliar")
+      .to_return(status: 200, body: body.to_json, headers: {})
+
+    stub_send_message(token,
+                      "Nombre Plan: PlanFamiliar\n" \
+                      "Costo: $4000\n" \
+                      "Límite cobertura visitas: Infinito\n" \
+                      "Copago: $100\n" \
+                      "Cobertura Medicamentos: 30%\n" \
+                      "Edad mínima: 20\n" \
+                      "Edad máxima: 60\n" \
+                      "Cantidad hijos máxima: 2\n" \
+                      'Conyuge: Admite conyuge')
     app = BotClient.new(token)
 
     app.run_once
