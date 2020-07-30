@@ -13,4 +13,11 @@ class AfiliadosService
     @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, 'Content-Type' => 'application/json')
     @response
   end
+
+  def self.check_afiliado(id_telegram)
+    @response = Faraday.head("#{ENV['API_URL']}/afiliados/#{id_telegram}")
+    return true if @response.status == 200
+
+    false
+  end
 end
