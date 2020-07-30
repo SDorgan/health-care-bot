@@ -275,7 +275,6 @@ Característica: Flujo completo via telegram
     Y mi diagnostico es informado a la institución
 
   @mvp
-  @wip
   Escenario: TELE18-DIAG3 - Diagnostico covid tira error por persona no afiliada
       Dado que el usuario "locomalo" no está afiliado
       Cuando envia "/diagnostico covid"
