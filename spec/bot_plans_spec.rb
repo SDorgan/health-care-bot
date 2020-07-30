@@ -99,4 +99,16 @@ describe 'BotClientPlansCommands' do
 
     app.run_once
   end
+
+  it 'should get plan data with name /plan message and respond with error the plan not exist' do # rubocop:disable RSpec/ExampleLength
+    stub_get_updates(token, '/plan NoExiste')
+    body = 'El plan ingresado no existe'
+    stub_request(:get, "#{ENV['API_URL']}/planes?nombre=NoExiste")
+      .to_return(status: 400, body: body, headers: {})
+
+    stub_send_message(token, body)
+    app = BotClient.new(token)
+
+    app.run_once
+  end
 end

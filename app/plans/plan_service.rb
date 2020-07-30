@@ -14,7 +14,7 @@ class PlanService
     if response.status == 200
       PlanPresenter.parse_data_plan(response.body)
     else
-      response.body.force_encoding('UTF-8')
+      'El plan ingresado no existe'
     end
   end
 end
