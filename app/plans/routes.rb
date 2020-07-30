@@ -17,4 +17,10 @@ module PlansRoutes
       bot.api.send_message(chat_id: message.chat.id, text: plans_text)
     end
   end
+
+  on_message_pattern %r{/plan (?<nombre>.*)} do |bot, message, args|
+    plan = PlanService.get_plan(args['nombre'])
+
+    bot.api.send_message(chat_id: message.chat.id, text: plan)
+  end
 end
