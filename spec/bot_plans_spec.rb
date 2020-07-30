@@ -11,6 +11,7 @@ describe 'BotClientPlansCommands' do
 
     body = { "planes": [] }
     stub_request(:get, "#{ENV['API_URL']}/planes")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token, 'Lo sentimos, parece que no hay planes cargados en el momento.')
