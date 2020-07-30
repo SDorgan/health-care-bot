@@ -1,4 +1,5 @@
 require 'faraday'
+require_relative 'plan_presenter'
 
 class PlanService
   def self.all_plans
@@ -6,5 +7,14 @@ class PlanService
     response = Faraday.get("#{ENV['API_URL']}/planes", {}, headers)
     plans = JSON.parse(response.body)
     plans['planes']
+  end
+
+  def self.get_plan(nombre)
+    response = Faraday.get("#{ENV['API_URL']}/planes", nombre: nombre)
+    if response.status == 200
+      PlanPresenter.parse_data_plan(response.body)
+    else
+      response.body.force_encoding('UTF-8')
+    end
   end
 end

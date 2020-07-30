@@ -16,6 +16,15 @@ Característica: Flujo completo via telegram
     Dado que existe el plan "PlanJuventud"
     Cuando envio "/planes"
     Entonces recibo listado de los planes dados de alta
+  @wip
+  Escenario: TELE2 - Consulta de un plan existente
+        Dado que existe el plan "PlanJuventud"
+        Cuando envio "/plan PlanJuventud"
+        Entonces recibo la información del "PlanJuventud"
+  @wip
+  Escenario: TELE3 - Consulta de plan PlanJuventud cuando no está cargado
+      Cuando envío "/plan PlanJuventud"
+      Entonces recibo "El plan ingresado no existe"
 
   Escenario: TELE4.1 - Registración exitosa de usuario a plan
     Dado el plan con nombre "PlanJuventud" con costo unitario $500

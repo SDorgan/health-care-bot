@@ -34,4 +34,36 @@ describe 'BotClientPlansCommands' do
 
     app.run_once
   end
+
+  it 'should get plan data with name /plan message and respond with the plan info' do # rubocop:disable RSpec/ExampleLength, Metrics/BlockLength
+    stub_get_updates(token, '/plan PlanJuventud')
+    body = { "plan": {
+      "id": 1,
+      "nombre": 'PlanJuventud',
+      "costo": 200,
+      "limite_cobertura_visitas": 2,
+      "copago": 100,
+      "cobertura_medicamentos": 30,
+      "edad_minima": 10,
+      "edad_maxima": 30,
+      "cantidad_hijos_maxima": 0,
+      "conyuge": 'NO_ADMITE_CONYUGE'
+    } }
+    stub_request(:get, "#{ENV['API_URL']}/planes?nombre=PlanJuventud")
+      .to_return(status: 200, body: body.to_json, headers: {})
+
+    stub_send_message(token,
+                      "Nombre Plan: PlanJuventud\n" \
+                      "Costo: $200\n" \
+                      "Límite cobertura visitas: 2\n" \
+                      "Copago: $100\n" \
+                      "Cobertura Medicamentos: 30%\n" \
+                      "Edad mínima: 10\n" \
+                      "Edad máxima: 30\n" \
+                      "Cantidad hijos máxima: 0\n" \
+                      'Conyuge: No admite conyuge')
+    app = BotClient.new(token)
+
+    app.run_once
+  end
 end
