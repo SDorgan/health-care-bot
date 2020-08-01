@@ -2,6 +2,7 @@ require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
 RACK_ENV = ENV['RACK_ENV'] ||= ENV['RACK_ENV'] ||= 'test' unless defined?(RACK_ENV)
+API_KEY = ENV['API_KEY'] ||= ENV['API_KEY'] ||= 'altojardin' unless defined?(API_KEY)
 
 RSpec::Core::RakeTask.new(:spec)
 
