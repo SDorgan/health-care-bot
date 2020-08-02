@@ -81,4 +81,12 @@ describe 'BotClientCentersCommands' do
     app = BotClient.new(token)
     app.run_once
   end
+
+  it 'should get keyboard require location when send /centros cercano' do
+    stub_get_updates(token, '/centros cercano')
+    stub_send_message_get_location(token, 'Ver centros cercanos', 'Activar localización')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end

@@ -136,3 +136,22 @@ def stub_send_keyboard_message(token, message_text)
     .to_return(status: 200, body: body.to_json, headers: {})
   # rubocop:enable Layout/LineLength
 end
+
+def stub_send_message_get_location(token, message, text_button)
+  body = {
+    "ok": true,
+    "result": {
+      "message_id": 12,
+      "from": { "id": 715_612_264, "is_bot": true, "first_name": 'fiuba-memo2-prueba', "username": 'fiuba_memo2_bot' },
+      "chat": { "id": 141_733_544, "first_name": 'Alto Jardin', "last_name": 'GOT', "username": 'altojardin', "type": 'private' },
+      "date": 1_557_782_999, "text": message
+    }
+  }
+  stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
+    .with(
+      body: { 'chat_id' => '141733544',
+              'reply_markup' => "{\"keyboard\":[[{\"text\":\"#{text_button}\",\"request_location\":true}]],\"resize_keyboard\":false,\"one_time_keyboard\":false,\"selective\":false}",
+              'text' => message }
+    )
+    .to_return(status: 200, body: body.to_json, headers: {})
+end

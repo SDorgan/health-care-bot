@@ -20,4 +20,17 @@ module CentrosRoutes
       end
     end
   end
+
+  on_message '/centros cercano' do |bot, message|
+    kb = [
+      Telegram::Bot::Types::KeyboardButton.new(text: 'Activar localización', request_location: true)
+    ]
+    markup = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: kb)
+    bot.api.send_message(chat_id: message.chat.id, text: 'Ver centros cercanos', reply_markup: markup)
+  end
+
+  on_response_location do |bot, message|
+    kb = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
+    bot.api.send_message(chat_id: message.chat.id, text: "Latitud: #{message.location.latitude} Longitud #{message.location.longitude}", reply_markup: kb)
+  end
 end
