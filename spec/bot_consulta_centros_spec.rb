@@ -89,4 +89,14 @@ describe 'BotClientCentersCommands' do
     app = BotClient.new(token)
     app.run_once
   end
+
+  it 'when send location should get cercanos' do # rubocop:disable RSpec/ExampleLength
+    latitude = -34.617559
+    longitude = -58.368413
+    stub_get_location_updates(token, latitude, longitude)
+    stub_send_message_remove_keyboard(token, "Latitud: #{latitude} Longitud #{longitude}")
+
+    app = BotClient.new(token)
+    app.run_once
+  end
 end
