@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../lib/routing'
 
 require_relative './register_covid_service'
+require_relative '../afiliados/afiliados_service'
 require_relative './suspect_response'
 require_relative './question_processor'
 require_relative './smell_question'
@@ -18,13 +19,20 @@ module CovidRoutes
   include Routing
 
   on_message '/diagnostico covid' do |bot, message|
-    question = CovidTempQuestion.new
+    if AfiliadosService.check_afiliado(message.from.id)
+      question = CovidTempQuestion.new
 
-    bot.api.send_message(
-      chat_id: message.chat.id,
-      text: question.text,
-      reply_markup: question.body
-    )
+      bot.api.send_message(
+        chat_id: message.chat.id,
+        text: question.text,
+        reply_markup: question.body
+      )
+    else
+      bot.api.send_message(
+        chat_id: message.chat.id,
+        text: 'Disculple, esta funcionalidad solo está disponible para afiliados.'
+      )
+    end
   end
 
   on_response_to CovidTempQuestion::TEXT do |bot, message|

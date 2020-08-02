@@ -274,6 +274,12 @@ Característica: Flujo completo via telegram
     Entonces recibo "Sos un caso sospechoso de COVID. Acercate a un centro médico"
     Y mi diagnostico es informado a la institución
 
+  @mvp
+  Escenario: TELE18-DIAG3 - Diagnostico covid tira error por persona no afiliada
+      Dado que el usuario "locomalo" no está afiliado
+      Cuando envia "/diagnostico covid"
+      Entonces recibe "Disculple, esta funcionalidad solo está disponible para afiliados."
+
   Escenario: TELE19 - Registración fallida de afiliado de 28 años, con hijos, sin conyuge a plan pareja
       Dado el plan con nombre "PlanPareja" con costo unitario $1800
       Y restricciones edad min 15, edad max 99, hijos max 0, requiere conyuge "si"

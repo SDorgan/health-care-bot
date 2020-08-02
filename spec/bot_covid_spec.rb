@@ -8,10 +8,27 @@ require File.dirname(__FILE__) + '/../app/bot_client'
 describe 'BotClientCovidCommands' do
   let(:token) { 'fake_token' }
 
-  it 'should get a /diagnostico covid message and respond with an inline keyboard' do
+  it 'should only be available for clients' do # rubocop:disable RSpec/ExampleLength
     token = 'fake_token'
 
     stub_get_updates(token, '/diagnostico covid')
+
+    stub_request(:head, "#{ENV['API_URL']}/afiliados/141733544").to_return(status: 404, body: nil, headers: {})
+
+    stub_send_message(token, 'Disculple, esta funcionalidad solo está disponible para afiliados.')
+
+    app = BotClient.new(token)
+
+    app.run_once
+  end
+
+  it 'should get a /diagnostico covid message and respond with an inline keyboard' do # rubocop:disable RSpec/ExampleLength
+    token = 'fake_token'
+
+    stub_get_updates(token, '/diagnostico covid')
+
+    stub_request(:head, "#{ENV['API_URL']}/afiliados/141733544").to_return(status: 200, body: nil, headers: {})
+
     stub_send_keyboard_message(token, 'Cuál es tu temperatura corporal?')
 
     app = BotClient.new(token)
