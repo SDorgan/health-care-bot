@@ -28,6 +28,7 @@ describe 'BotClientPlansCommands' do
       { id: 2, 'nombre': 'plan2' }
     ] }
     stub_request(:get, "#{ENV['API_URL']}/planes")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
     stub_send_message(token, "Estos son nuestros planes disponibles:\nplan1\nplan2")
 
@@ -51,6 +52,7 @@ describe 'BotClientPlansCommands' do
       "conyuge": 'NO_ADMITE_CONYUGE'
     } }
     stub_request(:get, "#{ENV['API_URL']}/planes?nombre=PlanJuventud")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,
@@ -83,6 +85,7 @@ describe 'BotClientPlansCommands' do
       "conyuge": 'ADMITE_CONYUGE'
     } }
     stub_request(:get, "#{ENV['API_URL']}/planes?nombre=PlanFamiliar")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token,
@@ -104,6 +107,7 @@ describe 'BotClientPlansCommands' do
     stub_get_updates(token, '/plan NoExiste')
     body = 'El plan ingresado no existe'
     stub_request(:get, "#{ENV['API_URL']}/planes?nombre=NoExiste")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 400, body: body, headers: {})
 
     stub_send_message(token, body)
