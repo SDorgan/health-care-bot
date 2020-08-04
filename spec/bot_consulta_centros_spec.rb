@@ -95,9 +95,32 @@ describe 'BotClientCentersCommands' do
     longitude = -58.368413
     stub_get_location_updates(token, latitude, longitude)
     body = { 'centros': [] }
-    stub_request(:get, "http://192.168.33.10:3000/centros?latitud=#{latitude}&longitud=#{longitude}")
+    stub_request(:get, "#{ENV['API_URL']}/centros?latitud=#{latitude}&longitud=#{longitude}")
       .to_return(status: 200, body: body.to_json, headers: {})
     stub_send_message_remove_keyboard(token, 'No hay hospitales disponibles')
+
+    app = BotClient.new(token)
+    app.run_once
+  end
+
+  it 'when send /centros cercano should get nearest center' do # rubocop:disable RSpec/ExampleLength
+    latitude = -34.591874
+    longitude = -58.401343
+    nombre_centro = 'Hospital Aleman'
+    direccion = '1674 Avenida Pueyrredón'
+    distancia = 1
+    stub_get_location_updates(token, latitude, longitude)
+    body = { 'centros': [{
+      'id': 1,
+      'nombre': nombre_centro,
+      'latitud': -34.591874,
+      'longitud': -58.401343,
+      'direccion': '1674 Avenida Pueyrredón',
+      'distancia': distancia
+    }] }
+    stub_request(:get, "#{ENV['API_URL']}/centros?latitud=#{latitude}&longitud=#{longitude}")
+      .to_return(status: 200, body: body.to_json, headers: {})
+    stub_send_message_remove_keyboard(token, "#{nombre_centro} - Dirección: #{direccion} - Distancia: #{distancia} km")
 
     app = BotClient.new(token)
     app.run_once

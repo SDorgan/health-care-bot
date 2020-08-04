@@ -306,6 +306,13 @@ Característica: Flujo completo via telegram
     21/01/2020 | Medicamentos                    | $800
     """
 
+  Escenario: TELE-CCC1 - Consulta exitosa de Centro por cercanía
+    Dado el centro con nombre "Hospital Aleman"
+    Y coordenadas geográficas latitud -34.591874 y longitud -58.401343
+    Y no hay otro centro disponible
+    Cuando envio "/centros cercano"
+    Entonces recibo "Hospital Alemán - Dirección: 1674 Avenida Pueyrredón - Distancia: X km"
+
   Escenario: TELE-CCC2 - Consulta sin respuestas de Centro por cercanía
           Dado que no hay centros disponibles
           Cuando envio "/centros cercano"

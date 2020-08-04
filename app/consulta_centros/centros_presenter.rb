@@ -17,7 +17,9 @@ class CentrosPresenter
     centros = json_response['centros']
     return 'No hay hospitales disponibles' if centros.empty?
 
-    'En progreso'
+    centro = centros[0]
+    message = "#{centro['nombre']} - Dirección: #{centro['direccion']} - Distancia: #{centro['distancia']} km"
+    message
   end
 
   def self.add_centro(centro)
