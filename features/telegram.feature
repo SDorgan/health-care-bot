@@ -306,3 +306,7 @@ Característica: Flujo completo via telegram
     21/01/2020 | Medicamentos                    | $800
     """
 
+  Escenario: TELE-CCC2 - Consulta sin respuestas de Centro por cercanía
+          Dado que no hay centros disponibles
+          Cuando envio "/centros cercano"
+          Entonces recibo "No hay hospitales disponibles"

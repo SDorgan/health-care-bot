@@ -12,6 +12,14 @@ class CentrosPresenter
     respuesta
   end
 
+  def self.parse_near_centro(body)
+    json_response = JSON.parse(body)
+    centros = json_response['centros']
+    return 'No hay hospitales disponibles' if centros.empty?
+
+    'En progreso'
+  end
+
   def self.add_centro(centro)
     "#{centro['nombre']} - Coordenadas(#{centro['latitud']}, #{centro['longitud']})\n"
   end

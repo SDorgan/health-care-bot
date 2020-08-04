@@ -90,11 +90,14 @@ describe 'BotClientCentersCommands' do
     app.run_once
   end
 
-  it 'when send location should get cercanos' do # rubocop:disable RSpec/ExampleLength
+  it 'when send /centros cercano should get message no centros when dont have nearest' do # rubocop:disable RSpec/ExampleLength
     latitude = -34.617559
     longitude = -58.368413
     stub_get_location_updates(token, latitude, longitude)
-    stub_send_message_remove_keyboard(token, "Latitud: #{latitude} Longitud #{longitude}")
+    body = { 'centros': [] }
+    stub_request(:get, "http://192.168.33.10:3000/centros?latitud=#{latitude}&longitud=#{longitude}")
+      .to_return(status: 200, body: body.to_json, headers: {})
+    stub_send_message_remove_keyboard(token, 'No hay hospitales disponibles')
 
     app = BotClient.new(token)
     app.run_once

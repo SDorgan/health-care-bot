@@ -31,6 +31,8 @@ module CentrosRoutes
 
   on_response_location do |bot, message|
     kb = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
-    bot.api.send_message(chat_id: message.chat.id, text: "Latitud: #{message.location.latitude} Longitud #{message.location.longitude}", reply_markup: kb)
+    response = CentrosService.get_near_centro(message.location.latitude, message.location.longitude)
+    reply_text = CentrosPresenter.parse_near_centro(response.body)
+    bot.api.send_message(chat_id: message.chat.id, text: reply_text, reply_markup: kb)
   end
 end
