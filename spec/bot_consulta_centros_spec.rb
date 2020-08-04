@@ -97,7 +97,7 @@ describe 'BotClientCentersCommands' do
     body = { 'centros': [] }
     stub_request(:get, "#{ENV['API_URL']}/centros?latitud=#{latitude}&longitud=#{longitude}")
       .to_return(status: 200, body: body.to_json, headers: {})
-    stub_send_message_remove_keyboard(token, 'No hay hospitales disponibles')
+    stub_send_message_remove_keyboard(token, 'No hay un centro cercano disponible')
 
     app = BotClient.new(token)
     app.run_once

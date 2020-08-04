@@ -316,4 +316,13 @@ Característica: Flujo completo via telegram
   Escenario: TELE-CCC2 - Consulta sin respuestas de Centro por cercanía
           Dado que no hay centros disponibles
           Cuando envio "/centros cercano"
-          Entonces recibo "No hay hospitales disponibles"
+          Entonces recibo "No hay un centro cercano disponible"
+
+  Escenario: TELE-CCC3 - Consulta exitosa de Centro por cercanía con múltiples centros
+      Dado el centro con nombre "Hospital Aleman"
+      Y coordenadas geográficas latitud -34.591874 y longitud -58.401343
+      Y el centro con nombre "Hospital Córdoba"
+      Y coordenadas geográficas latitud -31.406235 y longitud -64.158172
+      Cuando envio "/centros cercano" estando en Buenos Aires
+      Entonces recibo "Hospital Alemán - Dirección: 1674 Avenida Pueyrredón - Distancia: X km"
+

@@ -15,7 +15,7 @@ class CentrosPresenter
   def self.parse_near_centro(body)
     json_response = JSON.parse(body)
     centros = json_response['centros']
-    return 'No hay hospitales disponibles' if centros.empty?
+    return 'No hay un centro cercano disponible' if centros.empty?
 
     centro = centros[0]
     message = "#{centro['nombre']} - Dirección: #{centro['direccion']} - Distancia: #{centro['distancia']} km"
