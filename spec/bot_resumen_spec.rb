@@ -16,7 +16,9 @@ describe 'BotClientResumenCommands' do
                           "adicional": 0,
                           "total": 5000 },
              "items": [] }
-    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544").to_return(status: 200, body: body.to_json, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544")
+      .with(headers: { 'API_KEY': API_KEY })
+      .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message_with_html_parse(token,
                                       "Nombre: Nombre de Afiliado\n" \
@@ -50,7 +52,9 @@ describe 'BotClientResumenCommands' do
                               "costo": 700
                             }
                           ] } }
-    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544").to_return(status: 200, body: body.to_json, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544")
+      .with(headers: { 'API_KEY': API_KEY })
+      .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message_with_html_parse(token,
                                       "Nombre: Nombre de Afiliado\n" \
@@ -69,7 +73,9 @@ describe 'BotClientResumenCommands' do
   it 'when user non afiliated looks for his resume' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
     body = 'El ID no pertenece a un afiliado'
-    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544").to_return(status: 401, body: body, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544")
+      .with(headers: { 'API_KEY': API_KEY })
+      .to_return(status: 401, body: body, headers: {})
 
     stub_send_message_with_html_parse(token, 'Parece que no estás afiliado a ningún plan, por lo que no podemos mandarte un resumen en este momento.')
 
@@ -80,7 +86,9 @@ describe 'BotClientResumenCommands' do
   it 'when API fails looking up the resume' do # rubocop:disable RSpec/ExampleLength
     stub_get_updates(token, '/resumen')
     body = 'Error obteniendo el resumen'
-    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544").to_return(status: 500, body: body, headers: {})
+    stub_request(:get, "#{ENV['API_URL']}/resumen?id=141733544")
+      .with(headers: { 'API_KEY': API_KEY })
+      .to_return(status: 500, body: body, headers: {})
 
     stub_send_message_with_html_parse(token, 'Error obteniendo el resumen')
 
