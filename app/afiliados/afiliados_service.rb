@@ -10,7 +10,10 @@ class AfiliadosService
       "cantidad_hijos": data[:cantidad_hijos],
       "conyuge": data[:conyuge]
     }
-    @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, 'Content-Type' => 'application/json')
+    @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, {
+                               'Content-Type': 'application/json',
+                               'API_KEY': API_KEY
+                             })
     @response
   end
 
