@@ -10,12 +10,15 @@ class AfiliadosService
       "cantidad_hijos": data[:cantidad_hijos],
       "conyuge": data[:conyuge]
     }
-    @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, 'Content-Type' => 'application/json')
+    @response = Faraday.post("#{ENV['API_URL']}/afiliados", @request.to_json, {
+                               'Content-Type': 'application/json',
+                               'API_KEY': API_KEY
+                             })
     @response
   end
 
   def self.check_afiliado(id_telegram)
-    @response = Faraday.head("#{ENV['API_URL']}/afiliados/#{id_telegram}")
+    @response = Faraday.head("#{ENV['API_URL']}/afiliados/#{id_telegram}", {}, { 'API_KEY': API_KEY })
     return true if @response.status == 200
 
     false

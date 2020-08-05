@@ -28,7 +28,8 @@ describe 'BotClientRegistrationCommands' do
     body = { "id": 1 }
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 201, body: body.to_json, headers: {})
 
@@ -44,7 +45,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'no alcanza el límite mínimo de edad'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 7, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 7, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -60,7 +62,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'supera el límite máximo de edad'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 80, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 80, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -76,7 +79,8 @@ describe 'BotClientRegistrationCommands' do
     body = { "id": 1 }
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 201, body: body.to_json, headers: {})
 
@@ -92,7 +96,8 @@ describe 'BotClientRegistrationCommands' do
     body = { "id": 1 }
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 201, body: body.to_json, headers: {})
 
@@ -108,7 +113,8 @@ describe 'BotClientRegistrationCommands' do
     body = { "id": 1 }
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 10, 'conyuge': true, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 18, 'cantidad_hijos': 10, 'conyuge': true, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 201, body: body.to_json, headers: {})
 
@@ -124,7 +130,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan no admite hijos'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 20, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 20, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -140,7 +147,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan no admite conyuge'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanJuventud', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -156,7 +164,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan requiere tener hijos'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanFamiliar', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanFamiliar', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -172,7 +181,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan requiere tener hijos'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanFamiliar', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Juan', 'nombre_plan' => 'PlanFamiliar', 'edad': 20, 'cantidad_hijos': 0, 'conyuge': true, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -188,7 +198,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan no admite hijos'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Miriam Perez', 'nombre_plan' => 'PlanPareja', 'edad': 28, 'cantidad_hijos': 1, 'conyuge': true, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Miriam Perez', 'nombre_plan' => 'PlanPareja', 'edad': 28, 'cantidad_hijos': 1, 'conyuge': true, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 
@@ -204,7 +215,8 @@ describe 'BotClientRegistrationCommands' do
     body = 'este plan no admite hijos'
     stub_request(:post, "#{ENV['API_URL']}/afiliados")
       .with(
-        body: { 'nombre' => 'Miriam Perez', 'nombre_plan' => 'PlanPareja', 'edad': 28, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 }
+        body: { 'nombre' => 'Miriam Perez', 'nombre_plan' => 'PlanPareja', 'edad': 28, 'cantidad_hijos': 1, 'conyuge': false, 'id_telegram' => 141_733_544 },
+        headers: { 'API_KEY': API_KEY }
       )
       .to_return(status: 400, body: body, headers: {})
 

@@ -10,7 +10,7 @@ class PlanService
   end
 
   def self.get_plan(nombre)
-    response = Faraday.get("#{ENV['API_URL']}/planes", nombre: nombre)
+    response = Faraday.get("#{ENV['API_URL']}/planes", { nombre: nombre }, { 'API_KEY': API_KEY })
     if response.status == 200
       PlanPresenter.parse_data_plan(response.body)
     else

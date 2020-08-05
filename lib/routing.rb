@@ -2,8 +2,10 @@ module Routing
   @message_handlers = {}
   @regex_message_handlers = {}
   @callback_query_handlers = {}
+  @location_message_handlers = {}
 
   DEFAULT = '_default_handler_'.freeze
+  LOCATION = '_location_'.freeze
 
   def self.message_handlers
     @message_handlers
@@ -15,6 +17,10 @@ module Routing
 
   def self.callback_query_handlers
     @callback_query_handlers
+  end
+
+  def self.location_message_handlers
+    @location_message_handlers
   end
 
   def self.included(clazz)
@@ -45,6 +51,10 @@ module Routing
       Routing.callback_query_handlers[expected_message] = block
     end
 
+    def on_response_location(&block)
+      Routing.location_message_handlers[LOCATION] = block
+    end
+
     def default(&block)
       Routing.message_handlers[DEFAULT] = block
     end
@@ -55,7 +65,11 @@ module Routing
   def find_handler_for(message)
     case message
     when Telegram::Bot::Types::Message
-      Routing.message_handlers[message.text]
+      if !message.location.nil?
+        Routing.location_message_handlers[LOCATION]
+      else
+        Routing.message_handlers[message.text]
+      end
     when Telegram::Bot::Types::CallbackQuery
       Routing.callback_query_handlers[message.message.text]
     end
