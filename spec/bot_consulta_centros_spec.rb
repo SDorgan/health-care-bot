@@ -19,6 +19,7 @@ describe 'BotClientCentersCommands' do
 
     body = 'La prestación pedida no existe'
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=PrestacionFalsa")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 404, body: body.to_json, headers: {})
 
     stub_send_message(token, 'Perdón, no se encontró ninguna prestación con ese nombre.')
@@ -32,6 +33,7 @@ describe 'BotClientCentersCommands' do
 
     body = { 'centros': [] }
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token, 'Lo sentimos, no hay hospitales disponibles para esa prestación.')
@@ -50,6 +52,7 @@ describe 'BotClientCentersCommands' do
       'longitud': -36.40
     }] }
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token, "Hospital Alemán - Coordenadas(-37.54, -36.4)\n")
@@ -74,6 +77,7 @@ describe 'BotClientCentersCommands' do
                            'longitud': -46.45
                          }] }
     stub_request(:get, "#{ENV['API_URL']}/centros?prestacion=Traumatologia")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
 
     stub_send_message(token, "Hospital Alemán - Coordenadas(-37.54, -36.4)\nHospital Suizo - Coordenadas(-39.54, -46.45)\n")
@@ -96,6 +100,7 @@ describe 'BotClientCentersCommands' do
     stub_get_location_updates(token, latitude, longitude)
     body = { 'centros': [] }
     stub_request(:get, "#{ENV['API_URL']}/centros?latitud=#{latitude}&longitud=#{longitude}")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
     stub_send_message_remove_keyboard(token, 'No hay un centro cercano disponible')
 
@@ -119,6 +124,7 @@ describe 'BotClientCentersCommands' do
       'distancia': distancia
     }] }
     stub_request(:get, "#{ENV['API_URL']}/centros?latitud=#{latitude}&longitud=#{longitude}")
+      .with(headers: { 'API_KEY': API_KEY })
       .to_return(status: 200, body: body.to_json, headers: {})
     stub_send_message_remove_keyboard(token, "#{nombre_centro} - Dirección: #{direccion} - Distancia: #{distancia} km")
 
