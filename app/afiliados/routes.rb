@@ -23,7 +23,8 @@ module RegistrationRoutes
       if response.status == 201
         bot.api.send_message(chat_id: message.chat.id, text: 'Registración exitosa')
       else
-        bot.api.send_message(chat_id: message.chat.id, text: "Registración fallida: #{response.body.force_encoding('UTF-8')}")
+        respuesta = JSON.parse(response.body.force_encoding('UTF-8'))
+        bot.api.send_message(chat_id: message.chat.id, text: "Registración fallida: #{respuesta['mensaje']}")
       end
     else
       bot.api.send_message(chat_id: message.chat.id, text: 'Comando incorrecto, se necesita nombre del plan e información personal. Ej: /registracion NombrePlan, Nombre, {edad}')
