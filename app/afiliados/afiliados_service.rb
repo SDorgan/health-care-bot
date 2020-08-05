@@ -18,7 +18,7 @@ class AfiliadosService
   end
 
   def self.check_afiliado(id_telegram)
-    @response = Faraday.head("#{ENV['API_URL']}/afiliados/#{id_telegram}")
+    @response = Faraday.head("#{ENV['API_URL']}/afiliados/#{id_telegram}", {}, { 'API_KEY': API_KEY })
     return true if @response.status == 200
 
     false
