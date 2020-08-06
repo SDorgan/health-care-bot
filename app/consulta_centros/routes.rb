@@ -32,7 +32,11 @@ module CentrosRoutes
   on_response_location do |bot, message|
     kb = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
     response = CentrosService.get_near_centro(message.location.latitude, message.location.longitude)
-    reply_text = CentrosPresenter.parse_near_centro(response.body)
-    bot.api.send_message(chat_id: message.chat.id, text: reply_text, reply_markup: kb)
+    if response.status == 200
+      reply_text = CentrosPresenter.parse_near_centro(response.body)
+      bot.api.send_message(chat_id: message.chat.id, text: reply_text, reply_markup: kb)
+    else
+      bot.api.send_message(chat_id: message.chat.id, text: 'Error en encontrar centro cercano', reply_markup: kb)
+    end
   end
 end
