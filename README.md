@@ -1,7 +1,12 @@
 Alto Jardin Telegram Bot
 ====================
 
-[![build status](https://gitlab.com/fiuba-memo2/tp2/altojardin-bot/badges/master/pipeline.svg)](https://gitlab.com/fiuba-memo2/tp2/altojardin-bot/commits/master)
+## Preamble
+
+This repository contains the Telegram Bot as front end of the [api repository](https://github.com/SDorgan/health-care-api). The Heroku servers and Telegram bots have been disabled to reduce unnecessary upkeep costs.
+
+_____________
+
 
 # Bots
 
